@@ -9,11 +9,15 @@ class Controller:
         """Αρχικοποίηση του Controller
 
         Ανάθεση σε εσωτερικές μεταβλητές τα View, Model
-        :param view:
-        :param model:
+        :param view: Αντικείμενο View για την εμφάνιση της εφαρμογής
+        :param model: Αντικείμενο Model για την αποθήκευση/χειρισμό δεδομένων της εφαρμογής
         """
         self.model = model
         self.view = view
+        self.view.set_controller(self)
+
+    def hello(self, what):
+        print("Hello from", what)
 
 
 
