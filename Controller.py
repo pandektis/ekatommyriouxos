@@ -16,8 +16,9 @@ class Controller:
         self.view = view
         self.view.set_controller(self)
 
-    def hello(self, what):
-        print("Hello from", what)
+
+    def start_game(self):
+        pass
 
 
 
