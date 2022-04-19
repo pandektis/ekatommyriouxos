@@ -28,3 +28,11 @@ class Player:
             self.daep = self.poso / self.total_time
         except ZeroDivisionError as Z:
             self.daep = 0.0
+
+    def update_stats(self):
+        self._calc_mo()
+        self._calc_daep()
+
+    # Για να τρέχει ξεχωριστά το αρχείο, για testing
+    if __name__ == "__main__":
+        pass
