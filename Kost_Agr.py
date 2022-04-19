@@ -66,3 +66,24 @@ def read_questions():
     return questions
 read_questions()
 
+def save_stats(onoma_paixti, kerdismeno_poso, synolikos_xronos, arithmos erwtisewn):
+    """Ανακαλεί τα προηγούμενα στατιστικά και προσθέτει το τελευταίο παιχνίδι στα στατιστικά."""
+
+    stats = from_pickle()
+
+
+
+    to_pickle(stats)
+pass
+
+def to_pickle(stats):
+    """Αποθηκεύει στατιστικά στοιχεία σε αρχείο"""
+pass
+
+def from_pickle():
+    """Διαβάζει το αρχείο στατιστικών στοιχείων σε ένα dict. Δημιουργεί ένα νέα dict αν το αρχείο δεν υπάρχει.
+    Στη συνέχεια επιστρέφει το dict"""
+
+    return stats
+
+
