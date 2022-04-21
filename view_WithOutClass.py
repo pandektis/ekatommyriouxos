@@ -9,6 +9,8 @@ from pygame.locals import *
 import random
 from numpy.random import choice
 import numpy as np
+import midb
+
 
 pygame.init()
 
@@ -29,8 +31,8 @@ size = font.size(text)
 fg = 250, 250, 250
 bg = 5, 5, 5
 
-question_sys_font = pygame.font.SysFont("Tahoma", 50)
-answers_sys_font = pygame.font.SysFont ("Tahoma",30)
+question_sys_font = pygame.font.SysFont("Tahoma", 25)
+answers_sys_font = pygame.font.SysFont ("Tahoma",20)
 bank_sys_font = pygame.font.SysFont ("Arial",30)
 
 
@@ -100,12 +102,23 @@ def main():
     pygame.display.update()
     global background_image_blank
     global background_image
+    global correct_answer
+    global q
 
-    qdata = "Q11111111111"
-    ansAdata = "A111111111"
-    ansBdata = "B222222222"
-    ansCdata = "C333333333"
-    ansDdata = "D444444444"
+    qnum = int(random.random() * 10)
+    q = midb.get_question(0, qnum)
+    qdata=(q[0])
+    ansAdata=(q[1])
+    ansBdata=(q[2])
+    ansCdata=(q[3])
+    ansDdata=(q[4])
+
+
+
+
+    correct_answer = q[5]
+    print(correct_answer)
+
     screen.blit(background_image_blank, [0, 0])
     pygame.display.update()
     askName()
@@ -127,8 +140,9 @@ def main():
         draw_player_data(name)
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit();  # sys.exit() if sys is imported
+            if event.type == pygame.K_q:
+                #pygame.quit();
+                sys.exit();
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     print("PRESS A")
@@ -138,6 +152,9 @@ def main():
                     print("PRESS C")
                 if event.key == pygame.K_d:
                     print("PRESS D")
+                if event.key == pygame.K_SPACE:
+                    running = False
+                    main()
 
 
 
