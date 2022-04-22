@@ -34,6 +34,8 @@ bg = 5, 5, 5
 question_sys_font = pygame.font.SysFont("Tahoma", 25)
 answers_sys_font = pygame.font.SysFont ("Tahoma",20)
 bank_sys_font = pygame.font.SysFont ("Arial",30)
+font50_sys_font = pygame.font.SysFont(None, 50)
+cd_sys_font = pygame.font.SysFont(None, 100)
 
 
 background_image = pygame.image.load("img/lobby-2.png").convert()
@@ -47,10 +49,31 @@ pygame.mixer.music.play(0, 0.0)
 pygame.mixer.music.set_volume(0.2)
 
 
-def timerFunc(index):
-    index_old = index
-    index = index + 1
-    return index
+
+def countdown():
+    counter = 60
+    text = cd_sys_font.render(str(counter), True, (0, 128, 0))
+
+    timer_event = pygame.USEREVENT + 1
+    pygame.time.set_timer(timer_event, 1000)
+
+    run = True
+    while run:
+        clock.tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+            elif event.type == timer_event:
+                counter -= 1
+                text = cd_sys_font.render(str(counter), True, (0, 128, 0))
+                if counter == 0:
+                    pygame.time.set_timer(timer_event, 0)
+
+        screen.fill((255, 255, 255))
+        text_rect = text.get_rect(center=screen.get_rect().center)
+        screen.blit(text, text_rect)
+        #pygame.display.flip()
+
 
 def draw_player_data(name):
    textSurf = bank_sys_font.render("Ονομα :" + (name), 1, fg)
@@ -90,71 +113,98 @@ def draw_ansD(ansDdata):
 
 def askName():
     global inputname
-    inputname = simpledialog.askstring(title="Millionaire",
-                                      prompt="Καλώς ήρθες , εισήγαγε το όνομα σου για να συνεχίσεις :")
-
-
-#------------------------------------------------------MainProgram-------------------------------------------------
-def main():
-    balance = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000]
-    running = True
-
-    pygame.display.update()
-    global background_image_blank
-    global background_image
-    global correct_answer
-    global q
-
-    qnum = int(random.random() * 10)
-    q = midb.get_question(0, qnum)
-    qdata=(q[0])
-    ansAdata=(q[1])
-    ansBdata=(q[2])
-    ansCdata=(q[3])
-    ansDdata=(q[4])
-
-
-
-
-    correct_answer = q[5]
-    print(correct_answer)
 
     screen.blit(background_image_blank, [0, 0])
     pygame.display.update()
-    askName()
-
+    inputname = simpledialog.askstring(title="Millionaire",
+                                      prompt="Καλώς ήρθες , εισήγαγε το όνομα σου για να συνεχίσεις :")
     name = inputname
+    main()
+
+def viewQ():
+    global correct_answer , ansAdata , ansBdata , ansCdata , ansDdata , ansEdata , q , qdata
+    qnum = int(random.random() * 10)
+    q = midb.get_question(0, qnum)
+    qdata = (q[0])
+    ansAdata = (q[1])
+    ansBdata = (q[2])
+    ansCdata = (q[3])
+    ansDdata = (q[4])
+    draw_question(qdata)
+    draw_ansA(ansAdata)
+    draw_ansB(ansBdata)
+    draw_ansC(ansCdata)
+    draw_ansD(ansDdata)
+    correct_answer = q[5]
+    print(correct_answer)
+
+
+
+def check_answer(lvl,answer):
+    balance = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000]
+
+
+
+    if (correct_answer == answer):
+
+        if (lvl == 14):
+            print("EFTASES TIS 15 EROTISIS BRAVO")
+        else:
+            print("\nΣωστή απάντηση  %s τώρα έχεις $%s πάμε στην ερώτηση νούμερο #%s!  " % (inputname, balance[lvl + 1], lvl + 2))
+
+            #viewQ()
+            #check_answer(answer,lvl + 1)
+
+    else:
+        print("\n lathos h sosti einai  %s." % correct_answer)
+        main()
+
+#------------------------------------------------------MainProgram-------------------------------------------------
+def main():
+
+
+
+    pygame.display.update()
+
+
+
+    running = True
+    screen.blit(background_image, [0, 0])
+    viewQ()
 
 
 
     while (running):
-        screen.blit(background_image, [0, 0])
 
-
-        draw_question(qdata)
-        draw_ansA(ansAdata)
-        draw_ansB(ansBdata)
-        draw_ansC(ansCdata)
-        draw_ansD(ansDdata)
-
-        draw_player_data(name)
 
         for event in pygame.event.get():
-            if event.type == pygame.K_q:
-                #pygame.quit();
-                sys.exit();
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_a:
                     print("PRESS A")
+                    answer = ansAdata
+                    check_answer(0,answer)
                 if event.key == pygame.K_b:
                     print("PRESS B")
+                    answer = ansBdata
+                    check_answer(0,answer)
                 if event.key == pygame.K_c:
                     print("PRESS C")
+                    answer = ansCdata
+                    check_answer(0,answer)
                 if event.key == pygame.K_d:
                     print("PRESS D")
+                    answer = ansDdata
+                    check_answer(0, answer)
+                if event.key == pygame.K_5:
+                    print("PRESS 5")
                 if event.key == pygame.K_SPACE:
                     running = False
                     main()
+                if event.type == pygame.K_q:
+                    print("PRESS Q")
+                    pygame.quit();
+                    #sys.exit();
 
 
 
@@ -169,4 +219,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    askName()
+
+
+
+
+
