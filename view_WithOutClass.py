@@ -9,7 +9,7 @@ from pygame.locals import *
 import random
 from numpy.random import choice
 import numpy as np
-import midb
+from Kost_Agr import Game
 
 
 pygame.init()
@@ -121,21 +121,39 @@ def askName():
     name = inputname
     main()
 
+
 def viewQ():
     global correct_answer , ansAdata , ansBdata , ansCdata , ansDdata , ansEdata , q , qdata
-    qnum = int(random.random() * 10)
-    q = midb.get_question(0, qnum)
-    qdata = (q[0])
-    ansAdata = (q[1])
-    ansBdata = (q[2])
-    ansCdata = (q[3])
-    ansDdata = (q[4])
+
+    newGame = Game()
+    GetQuestion = newGame.get_question()
+    qdata =  GetQuestion.question.split('.')[1].lstrip()
+    ansAdata = GetQuestion.answers[0].split('.')[1].lstrip()
+    ansBdata = GetQuestion.answers[1].split('.')[1].lstrip()
+    ansCdata = GetQuestion.answers[2].split('.')[1].lstrip()
+    ansDdata = GetQuestion.answers[3].split('.')[1].lstrip()
+
     draw_question(qdata)
     draw_ansA(ansAdata)
     draw_ansB(ansBdata)
     draw_ansC(ansCdata)
     draw_ansD(ansDdata)
-    correct_answer = q[5]
+
+
+
+    correct_answer = GetQuestion.correct_answer
+    if correct_answer == 0:
+        correct_answer = ansAdata
+    elif correct_answer == 1:
+        correct_answer = ansBdata
+    elif correct_answer == 2:
+        correct_answer = ansCdata
+    elif correct_answer == 3:
+        correct_answer = ansDdata
+
+
+
+
     print(correct_answer)
 
 
