@@ -1,5 +1,5 @@
 import pygame
-import math
+import math , time
 from tkinter import simpledialog
 from Kost_Agr import Game
 
@@ -71,23 +71,22 @@ def viewQ():
 def check_answer(lvl,answer):
     balance = [0, 100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 32000, 64000, 125000, 250000, 500000, 1000000]
     inputname = "BLABLAS"
+    print(lvl)
 
 
 
 
     if (correct_answer == answer):
+        print("\nΣωστή απάντηση  %s τώρα έχεις $%s πάμε στην ερώτηση νούμερο #%s!  " % (inputname, balance[lvl + 1], lvl + 2))
+        soundPlay('snd/correct answer.mp3')
 
 
-        if (lvl == 14):
-            print("14")
-        else:
-            print("\nΣωστή απάντηση  %s τώρα έχεις $%s πάμε στην ερώτηση νούμερο #%s!  " % (inputname, balance[lvl + 1], lvl + 2))
-            #correctButton()
-            #viewQ()
-            check_answer(answer,lvl + 1)
+        main()
+        #check_answer(answer,lvl + 1)
 
     else:
-        print("\n Λαθος η σωστη ειναι  %s." % correct_answer)
+        print("\n Λαθος η σωστή απάντηση  %s." % correct_answer)
+        soundPlay('snd/wrong answer.mp3')
 
         main()
 
@@ -126,12 +125,17 @@ counter = 60
 
 
 
-################################StartUpMixSound#######################################################################
+################################MixSound#######################################################################
+def soundPlay(filepath):
+    pygame.mixer.init()
+    pygame.mixer.set_num_channels(8)
+    voice = pygame.mixer.Channel(5)
+    sound = pygame.mixer.Sound(filepath)
+    voice.play(sound)
 
-pygame.mixer.init()
-pygame.mixer.music.load("snd/millionaire_intro.mp3")
-pygame.mixer.music.play(0, 0.0)
-pygame.mixer.music.set_volume(0.2)
+
+
+
 
 #####################################################################################################################
 
