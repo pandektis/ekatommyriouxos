@@ -1,6 +1,6 @@
 import pygame as pg
 from pygame.locals import *
-class Splash(object):
+class SplashMode(object):
     def __init__(self, width, height, bgPath, sndPath, msg) -> None:
         pg.init()
         self.s = pg.display.set_mode((width, height), pg.NOFRAME)
@@ -20,14 +20,14 @@ class Splash(object):
     def showSplash(self):
         a = 0
         self.s.fill((0,0,0))
-        splash.draw(self.s,a)
+        self.draw(self.s,a)
         clock = pg.time.Clock()
         pg.display.update()
         pg.mixer.music.set_volume(0.2)
         pg.mixer.music.play()    
         while pg.mixer.music.get_busy():
             pg.event.pump()
-            splash.draw(self.s, a)
+            self.draw(self.s, a)
             if a < 255:
                 self.s.blit(self.text, self.text_coords)
                 a += 1
@@ -43,7 +43,7 @@ class Splash(object):
 
 if __name__ == "__main__":
 
-    splash = Splash(600, 600, "img\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
+    splash = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
     splash.showSplash()
     
             
