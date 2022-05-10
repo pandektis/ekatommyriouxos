@@ -59,9 +59,12 @@ class Game:
         else:
             level = "C"
         #τραβηγμα τυχαίας ερώτησης
-        question_number = random.randint(0, len(self.questions[level]))
+        question_number = random.randint(0, len(self.questions[level])-1)
         #διαγραφη της ερώτησης με την pop
         question = self.questions[level].pop(question_number)
+        #κρατάμε τον αριθμό των ερωτήσεων
+        self.questions_asked+=1
+        print("o arithmos twn ervtisewn einai",self.questions_asked)
 
         print(question)
         return question
@@ -101,6 +104,23 @@ class Graphic:
         self.next_btn = tk.Button(self.question_frame, text="Next question", bg="white")
         self.next_btn.bind('<Button-1>', lambda event: self.ask_question())
 
+        #Αρχικοποίηση κουμπιού 50-50
+        self.fifty50_btn = tk.Button(self.question_frame, text="50-50")
+        # Αρχικοποίηση κουμπιού Προτασης βοήθειας
+        self.suggestion_btn = tk.Button(self.question_frame, text="Πρόταση")
+        # Αρχικοποίηση κουμπιού Αντικατάστασης
+        self.replace_btn = tk.Button(self.question_frame, text="Αντικατάσταση")
+
+        #Δημιουργία κουμπιών και τοποθέτηση
+        self.fifty50_btn.pack(pady=10, side="left", expand="true")
+        self.suggestion_btn.pack(side="left", expand="true")
+        self.replace_btn.pack(side="left", expand="true")
+
+        #Εισαγωγη μεθόδου στο κάθε κουμπί
+        self.fifty50_btn.bind('<Button-1>', lambda event: self.fifty50())
+        self.suggestion_btn.bind('<Button-1>', lambda event: self.suggestion())
+        self.replace_btn.bind('<Button-1>', lambda event: self.replace())
+
     def ask_question(self):
         """Εδώ γινεται η δουλειά εμφάνισης της ερώτησης στο γραφικό"""
         #παίρνουμε την ερώτηση απο την get_question της κλασης game
@@ -126,8 +146,63 @@ class Graphic:
         if not correct:
             self.answer_buttons[clicked_button_number]["bg"] = "red"
 
+            # μετρητής λάθος απαντήσεων
+            self.game.mistakes += 1
+            # αν γίνουν 3 λάθη καλούμε την game over και τέλος παιχνιδιου
+            if self.game.mistakes == 3:
+                self.game_over()
+
+
+
+
         #εισαγωγη του κουμπιού της επόμενης ερώτησης
         self.next_btn.pack(side="left")
+
+    def fifty50(self):
+        """Όταν κάνουμε κλικ στη βοήθεια 50 50. Επισημαίνει δύο λανθασμένες απαντήσεις με κόκκινο χρώμα"""
+        #λιστα με τα νούμερα των πιθανών απαντήσεων
+        ans = [0, 1, 2, 3]
+        #αφαίρεση απο τη λίστα του νούμερου της σωστής απάντησης
+        ans.remove(self.correct_button_number)
+        #αφαίρεση μιας ακόμας random απάντησης εκτός της σωστης που έχει αφαιρεθεί
+        ans.remove(random.choice(ans))
+        #κάνουμε κόκκινα 2 κουμπιά απαντήσεων
+        for i in ans:
+            self.answer_buttons[i]["bg"] = "red"
+        #αφαίρεση κουμπιού όταν πατηθεί
+        self.fifty50_btn.forget()
+
+
+    def suggestion(self):
+        """Όταν κάνουμε κλικ στη βοήθεια προτασης. Επισημαίνει όλες τις λανθασμένες απαντήσεις με κόκκινο χρώμα"""
+        #με την ίδια λογική όπως με το 50 50
+        ans = [0, 1, 2, 3]
+        #αφαιρούμε τη σωστή απάντηση
+        ans.remove(self.correct_button_number)
+        #κάνουμε κοκκινές όλες τις λανθασμένες
+        for i in ans:
+            self.answer_buttons[i]["bg"] = "red"
+        self.suggestion_btn.forget()
+
+
+    def replace(self):
+        """Όταν κάνουμε κλικ στη βοήθεια αντικατάστασης."""
+        #απλά καλούμε την ask question και ρωτάμε μια καινούργια ερώτηση
+        self.ask_question()
+        #αφαιρούμε μια ερώτηση απο τον αριθμό ερωτήσεων
+        self.game.questions_asked -= 1
+        #print(self.questions_asked)
+
+        self.replace_btn.forget()
+
+    def game_over(self):
+        """Καλείται στο τέλος του παιχνιδιού"""
+        self.question_frame.forget()
+
+        tk.Label(text="GAME OVER", bg="black", fg="white").pack()
+        tk.Label(text="Αριθμός ερωτήσεων", bg="black", fg="white").pack()
+        tk.Label(text=self.game.questions_asked, bg="black", fg="white").pack()
+
 
 
     def get_lambda(self, i):
