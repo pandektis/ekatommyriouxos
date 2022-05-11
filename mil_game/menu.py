@@ -1,6 +1,6 @@
 import pygame, os, sys
 from pygame.locals import *
-from milgame import *
+from game import *
 from button import Button
 pygame.init()
 class MenuMode(object):
@@ -18,7 +18,11 @@ class MenuMode(object):
             btn.add_text(font50, item, (255,0,0))
             btn.add(self.menuButtons)
 
-        
+    def setPlayMode(self, mode):
+        self.playmode = mode
+
+    def setScoreMode(self, mode):
+        self.scoremode = mode
 
     def draw(self, surface):
         surface.blit(pygame.transform.scale(self.background_img, (surface.get_rect().width, surface.get_rect().height)), (0,0))
@@ -31,9 +35,21 @@ class MenuMode(object):
 
     def update(self, gameTime):
         click = pygame.mouse.get_pressed()[0]
-        
         pos = pygame.mouse.get_pos()
-        if click:
+        
+        if click and self.inputTick == 0:
+            self.inputTick = 250
             for btn in self.menuButtons.sprites():
                 if btn.rect.collidepoint(pos):
-                    print(btn.msg)
+                    if(btn.msg == self.menuItems[0]):
+                        self.game.changeMode(self.playmode)
+                    elif(btn.msg == self.menuItems[1]):
+                        self.game.changeMode(self.scoremode)
+                    elif(btn.msg == self.menuItems[2]):
+                        self.game.changeMode(None)
+        elif(self.inputTick > 0):
+            print("minus")
+            self.inputTick -= gameTime
+
+        if(self.inputTick < 0):
+            self.inputTick = 0

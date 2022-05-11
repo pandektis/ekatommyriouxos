@@ -1,4 +1,4 @@
-from Player import Player
+from player import Player
 
 class Model:
     """
@@ -14,7 +14,7 @@ class Model:
 
     def __init__(self, name) -> None:
         ''' Αρχικοποίηση κλάσης, ορισμός μεταβλητών'''
-        self.p = Player(name)
+        self.player = Player(name)
         self.time_sec = 60
         self.used = set() # Χρησιμοποιημένες ερωτήσεις.
         self.num_played_questions = 0 # Πόσες ερωτήσεις έχουμε παίξει.
