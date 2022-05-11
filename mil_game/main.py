@@ -16,9 +16,14 @@ splashscreen = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/milliona
 splashscreen.showSplash()
 splashscreen = None
 
+# Δημιουγούμε παιχνίδι, βάζουμε τίτλο και διαστάσεις
 mil_game = MainGame("Εκατομμυριούχος", 1024, 600)
+# Δημιουργούμε μενού, περνάμε το αντικείμενο παιχνίδι
 main_menu = MenuMode(mil_game)
+# Δημιουργούμε αντικείμενο αποτελέσματα, περνάμε παιχνίδι, επόμενη κατάσταση, και παίκτες προς εμφάνιση
 high_scores = ScoreMode(mil_game,main_menu,players)
+# Ορίζουμε την κατάσταση αποτελέσματα για το αντίστοιχο κουμπί του menu
 main_menu.setScoreMode(high_scores)
 
+# Ξεκινάμε το παιχνίδι
 mil_game.play(main_menu)

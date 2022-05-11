@@ -2,6 +2,11 @@ import pygame, os, sys
 from pygame.locals import *
 
 class MainGame(object):
+    """
+    Κλάση για την υλοποίηση του κυρίως βρόχου του παιχνιδιού
+
+    Εδώ γίνεται η εμφάνιση / ανανέωση κάθε κατάστασης του παιχνιδιού
+    """
     def __init__(self, gameName, width, height) -> None:
         pygame.init()
         pygame.display.set_caption(gameName)
@@ -12,6 +17,10 @@ class MainGame(object):
         self.currentMode = None
 
     def changeMode(self, newMode):
+        """
+        Αλλάζουμε κατάσταση παιχνιδιού.
+        Αν δεν υπάρχει κατάσταση, τερματίζουμε το παιχνίδι
+        """
         if(newMode == None):
             pygame.quit()
             sys.exit()
@@ -20,7 +29,9 @@ class MainGame(object):
 
 
     def play(self, startMode):
-
+        """
+        Τρέχουμε το παιχνίδι
+        """
         self.changeMode(startMode)
         # print(self.currentMode)
         while True:

@@ -4,7 +4,10 @@ from game import *
 from button import Button
 pygame.init()
 class MenuMode(object):
-
+    """
+    Κατάσταση παιχνιδιού Μενού.
+    Το κυρίως μενού του παιχνιδιού
+    """
     def __init__(self, game):
         self.game = game
         self.index = 0
@@ -18,9 +21,11 @@ class MenuMode(object):
             btn.add_text(font50, item, (255,0,0))
             btn.add(self.menuButtons)
 
+    # Θέτουμε την κατάσταση για νέο παιχνίδι
     def setPlayMode(self, mode):
         self.playmode = mode
 
+    # Θέτουμε την κατάσταση για εμφάνιση αποτελεσμάτων.
     def setScoreMode(self, mode):
         self.scoremode = mode
 
