@@ -230,7 +230,7 @@ def read_questions():
         for i in range(len(lines)):
             #γραμμή γραμμή
             line = lines[i]
-            #Όλες οι ερωτήσεις τελειώνουν με ; οπότε με τη line.rstrip().endswith(";") παίρνουμε μόνο τις ερωτήσεις
+            #Όλες οι ερωτήσεις τελειώνουν με ; οπότε με τη line.rstrip().endswith(";")  ξέρουμε οτι ξεκινάει μια ερώτηση και οι απαντήσεις της
             if line.rstrip().endswith(";"):
             #Αν η συνθήκη ειναι true τότε στέλνουμε ως ορίσματα στην κλάση question τις ερωτήσεις και τις αντίστοιχες απαντήσεις
                 question = Question(line, [lines[j].rstrip() for j in range(i + 1, i + 5)] )
