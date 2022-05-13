@@ -24,6 +24,9 @@ class TimerController:
     def update(self, gameTime):
         if self.model.counter > 0:
             self.model.counter -= 1
+        elif self.model.counter == 0:
+            self.model.isover = True
+            self.model.counter = 60
 
 
 
