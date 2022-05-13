@@ -25,7 +25,21 @@ class GameMode:
 
 
     def update(self, gameTime, event_list):
-        pass
+        # Ζητάμε από κάθε αντικείμενο που αποτελεί το παρόν mode παιχνιδιού να κάνει τους ελέγχους και τις ενημερώσεις.
+        for manager in self.controllers:
+            manager.update(gameTime, event_list)
+        
+        # Μετά το update ρωτάμε τα αντικείμενα για τις συνθήκες που θέλουμε
+        
+
+
+        if(self.player_controller.model.lives == 0):
+            pass #game over
+
+        # Ζητάμε από κάθε View να εμφανίσει αυτά που έχει στην οθόνη
+        for painter in self.views:
+            painter.draw(self.game.mainscreen)
+        
 
     def draw(self, surface):
         pass

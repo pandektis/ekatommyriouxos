@@ -10,7 +10,6 @@ class MenuMode(object):
     """
     def __init__(self, game):
         self.game = game
-        self.index = 0
         self. inputTick = 0
         self.menuButtons = pygame.sprite.Group()
         self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg').convert()
