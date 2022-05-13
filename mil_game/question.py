@@ -92,7 +92,7 @@ class QuestionController:
         (Η update() τρέχει σε κάθε frame του game loop, είναι σα να είχαμε κώδικα μέσα στο while του gameloop)
     """
     def __init__(self):
-        self.qmodel = QuestionModel
+        self.qmodel = QuestionModel() # φόρτωμα των ερωτήσεων.
     pass
 
 
