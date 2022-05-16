@@ -17,10 +17,16 @@ class GameMode:
     def __init__(self, game, gameOverMode):
         self.game = game
         self.gameOverMode = gameOverMode
-        
+        self.player_controller = PlayerController("New Player")
+        self.question_controller = QuestionController()
         self.controllers = None
         self.views = None
         self.time_allowed = 60
+        self.setup()
+
+    def setup(self):
+        player_view = PlayerScoreView(self.player_controller)
+        question_view = QuestionView(self.question_controller)
 
 
 
