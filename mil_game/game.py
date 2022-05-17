@@ -37,7 +37,8 @@ class MainGame(object):
         self.changeMode(startMode)
         # print(self.currentMode)
         while True:
-            for event in pygame.event.get():
+            event_list = pygame.event.get()
+            for event in event_list:
                 if event.type == QUIT:
                     pygame.quit()
                     sys.exit()
@@ -45,7 +46,7 @@ class MainGame(object):
             gameTime = self.clock.get_time()
 
             if(self.currentMode):
-                self.currentMode.update(gameTime)
+                self.currentMode.update(gameTime, event_list)
 
             # self.mainscreen.fill(self.background)
             if(self.currentMode):

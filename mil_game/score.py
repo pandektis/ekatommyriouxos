@@ -30,7 +30,7 @@ class ScoreMode:
             h += btn.rect.height + 5
             btn.add(self.groupb)
 
-    def update(self, gameTime):
+    def update(self, gameTime, event_list):
         click = pygame.mouse.get_pressed()[0]
         pos = pygame.mouse.get_pos()
 

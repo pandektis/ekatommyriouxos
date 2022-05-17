@@ -37,7 +37,7 @@ class MenuMode(object):
             # surface.blit(btn.image,(surface.get_rect().width // 2 - btn.rect.width //2, surface.get_rect().height //3 + i * 160) )
         self.menuButtons.draw(surface)
 
-    def update(self, gameTime):
+    def update(self, gameTime, event_list):
         click = pygame.mouse.get_pressed()[0]
         pos = pygame.mouse.get_pos()
         

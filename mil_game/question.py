@@ -1,7 +1,7 @@
 import pygame, os, sys
 from pygame.locals import *
 
-from View_ import RadioButton
+# from View_ import RadioButton
 
 class Question:
     
@@ -95,6 +95,8 @@ class QuestionController:
         self.qmodel = QuestionModel() # φόρτωμα των ερωτήσεων.
     pass
 
+    def update(self, gameTime, event_list):
+        pass
 
 class QuestionView:
     """ Κλάση υπεύθυνη για την εμφάνιση της τρέχουσας ερώτησης και απαντήσεων.

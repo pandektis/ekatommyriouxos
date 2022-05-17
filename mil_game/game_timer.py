@@ -18,10 +18,13 @@ class TimerController:
         Έχει μέθοδο update() για να ελέγχει τα timerEvents και να κατεβάζει το χρόνο
         όταν γίνει 0, διαμορφώνει το model.isover σε True
         """
-    def __init__(self, gameTime, event_list):
-        self.model = TimerModel(60)
+    def __init__(self, time_total,):
+        self.model = TimerModel(time_total)
         
-    def update(self, gameTime):
+    def update(self, gameTime,  event_list):
+        """ Ενημερώνουμε τον timer, είτε με USEREVENT είτε μετρώντας χειροκίνητα χρόνο.
+        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου.
+        Όταν γίνει 0 ενημερώνουμε τη μεταβλητή του isover και την ελέγχει απ' έξω το παιχνίδι."""
         if self.model.counter > 0:
             self.model.counter -= 1
         elif self.model.counter == 0:
@@ -37,6 +40,10 @@ class TimerView:
         self.offset = (pi * 2) / self.timer.model.counter
 
     def draw(self, surface):
+        """
+        Συνάρτηση για να εμφανίζει τον κύκλο και το νούμερο με τα δευτερόλεπτα.
+        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου.
+        Θέλει συμπλήρωση"""
         cur_offset = self.offset * self.timer.model.counter
         surface.fill((0,0,0))
         rect = pygame.Rect(surface.get_rect().width // 2 - 100, surface.get_rect().height // 2 - 100,200,200 )
@@ -44,6 +51,8 @@ class TimerView:
 
 
 
+
+#### Τεστ, to be deleted
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((800,600))

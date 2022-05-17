@@ -6,7 +6,7 @@ class Player:
     """
     def __init__(self, name):
         self.name = name #
-        self.live = 3 # Αριθμός 'ζωών', δλδ πόσα λάθη μπορεί να κάνει.
+        self.lives = 3 # Αριθμός 'ζωών', δλδ πόσα λάθη μπορεί να κάνει.
         self.poso = 0
         self.num_questions = 0
         self.total_time = 0.0
@@ -43,9 +43,10 @@ class PlayerController:
     def __init__(self, name):
         self.model = Player(name)
 
+    def update(self, gameTime, event_list):
+        pass
 
-
-class PlayerScoreView:
+class PlayerView:
     """ Κλάση υπεύθυνη για την εμφάνιση των στοιχείων του παίκτη.
     
         Εδώ φτιάχνουμε τη μορφή εμφάνισης του παίκτη (buttons ή όπως αλλιώς)
@@ -60,7 +61,8 @@ class PlayerScoreView:
         self.player = player
         pass
 
-
+    def draw(self, surface):
+        pass
 
 
 

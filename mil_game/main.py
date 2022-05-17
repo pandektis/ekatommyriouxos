@@ -3,6 +3,7 @@ from menu import MenuMode
 from splash import SplashMode
 from score import ScoreMode
 from player import Player
+from milgame import GameMode
 '''
 Το σημείο εισαγωγής στην εφαρμογή
 
@@ -16,13 +17,21 @@ splashscreen = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/milliona
 splashscreen.showSplash()
 splashscreen = None
 
-# Δημιουγούμε παιχνίδι, βάζουμε τίτλο και διαστάσεις
+# Δημιουγούμε πλαίσιο παιχνιδιού, βάζουμε τίτλο και διαστάσεις. Κύριος βρόχος, μέσα σ' αυτόν τρέχουν
+# όλα τα άλλα αντικείμενα / καταστάσεις (menu, play_mode, high_scores, etc) 
 mil_game = MainGame("Εκατομμυριούχος", 1024, 600)
-# Δημιουργούμε μενού, περνάμε το αντικείμενο παιχνίδι
+
+# Δημιουργούμε κατάσταση μενού, περνάμε το πλαίσιο παιχνίδιού για να αλλάζουμε καταστάσεις
 main_menu = MenuMode(mil_game)
+
 # Δημιουργούμε αντικείμενο αποτελέσματα, περνάμε παιχνίδι, επόμενη κατάσταση, και παίκτες προς εμφάνιση
 high_scores = ScoreMode(mil_game,main_menu,players)
+
+#ορίζουμε την play_mode, η κατάσταση που παίζει όλο το παιχνίδι
+play_mode = GameMode(mil_game, high_scores)
+
 # Ορίζουμε την κατάσταση αποτελέσματα για το αντίστοιχο κουμπί του menu
+main_menu.setPlayMode(play_mode)
 main_menu.setScoreMode(high_scores)
 
 # Ξεκινάμε το παιχνίδι
