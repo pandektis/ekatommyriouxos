@@ -18,7 +18,8 @@ class GameMode:
         self.game = game
         self.gameOverMode = gameOverMode
         self.time_allowed = 60
-        self.player_controller = PlayerController("New Player")
+        self.player_controller = PlayerController("Player")
+        self.player_view = PlayerView(self.player_controller)
         self.question_controller = QuestionController()
         self.time_counter = TimerController(self.time_allowed)
         self.controllers = None
@@ -27,13 +28,15 @@ class GameMode:
         self.setup()
 
     def setup(self):
-        player_view = PlayerView(self.player_controller)
         question_view = QuestionView(self.question_controller)
         timer_view = TimerView(self.time_counter)
         self.controllers = [self.question_controller, self.player_controller, self.time_counter]
-        self.views = [player_view, question_view, timer_view]
+        self.views = [self.player_view, question_view, timer_view]
 
 
+    def set_name(self, name):
+        self.player_controller.model.name = name
+        self.player_view.update_name()
 
     def update(self, gameTime, event_list):
         """ Γενική συνάρτηση για ενημέρωση όλων των αντικειμένων που αποτελούν το παιχνίδι
@@ -92,9 +95,9 @@ class GameMode:
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. 
         """
         ### Κώδικας για background και ό,τι άλλο δεν ανήκει σε κάποιο άλλο αντικείμενο
-        
+        surface.fill((20,20,20))
 
         # Ζητάμε από κάθε View να εμφανίσει αυτά που έχει στην οθόνη
         for painter in self.views:
-            painter.draw(self.game.mainscreen)
+            painter.draw(surface)
         

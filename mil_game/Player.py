@@ -1,10 +1,13 @@
+import pygame, os, sys
+from pygame.locals import *
+
 class Player:
     """
     Κρατάει τα δεδομένα του παίκτη.
 
     Διατηρεί κι ενημερώνει τα ζητούμενα δεδομένα του παίκτη.
     """
-    def __init__(self, name):
+    def __init__(self, name = "Player"):
         self.name = name #
         self.lives = 3 # Αριθμός 'ζωών', δλδ πόσα λάθη μπορεί να κάνει.
         self.poso = 0
@@ -57,12 +60,17 @@ class PlayerView:
         Περιέχει μέθοδο draw() για την εμφάνιση, η οποία θα καλείται σε κάθε
         frame μέσω του gameMode
         """
-    def __init__(self, player):
-        self.player = player
-        pass
+    def __init__(self, player_ctrl):
+        self.player = player_ctrl
+        self.view_font = pygame.font.Font(None, 36)
+        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (255,0,0))
 
+    def update_name(self):
+        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (255,0,0))
+    
     def draw(self, surface):
-        pass
+        surface.blit(self.name_surf, (50,50))
+        
 
 
 

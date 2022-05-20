@@ -38,6 +38,10 @@ class TimerView:
     def __init__(self, timer):
         self.timer = timer
         self.offset = (pi * 2) / self.timer.model.counter
+        self.rect = pygame.Rect(pygame.display.get_surface().get_rect().width // 2 - 100, pygame.display.get_surface().get_rect().height // 2 - 100,200,200 )
+        self.timer_surf = pygame.Surface(self.rect.size)
+        print(self.timer_surf.get_rect())
+        print(self.rect)
 
     def draw(self, surface):
         """
@@ -45,19 +49,19 @@ class TimerView:
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου.
         Θέλει συμπλήρωση"""
         cur_offset = self.offset * self.timer.model.counter
-        surface.fill((0,0,0))
-        rect = pygame.Rect(surface.get_rect().width // 2 - 100, surface.get_rect().height // 2 - 100,200,200 )
-        pygame.draw.arc(surface, (255,0,0), rect,  pi /2, pi / 2 + cur_offset )
-
-
+        self.timer_surf.fill((0,0,255))
+        
+        pygame.draw.arc(self.timer_surf, (255,0,0), self.timer_surf.get_rect(),  pi /2, pi / 2 + cur_offset )
+        
+        surface.blit(self.timer_surf, self.rect)
 
 
 #### Τεστ, to be deleted
 if __name__ == "__main__":
     pygame.init()
     screen = pygame.display.set_mode((800,600))
-    model = TimerModel(60)
-    cntrler = TimerController(None, None)
+    # model = TimerModel(60)
+    cntrler = TimerController(60)
     timer_view = TimerView(cntrler)
     fps = pygame.time.Clock()
     while True:
@@ -65,7 +69,7 @@ if __name__ == "__main__":
         for event in events:
             if event.type == QUIT:
                 pygame.quit()
-        cntrler.update(None)
+        cntrler.update(None, None)
         timer_view.draw(screen)
         pygame.display.update()
         fps.tick(1) # έχω βάλει 1 εδώ για επίδειξη μόνο, κανονικά ελέγχουμε το χρόνο με το event, ή μέσα στην update()
