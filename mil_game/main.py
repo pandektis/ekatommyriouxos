@@ -12,14 +12,14 @@ from milgame import GameMode
 '''
 
 # Δείχνουμε τη splash, και μετά τη διώχνουμε
-players = [Player("Player " + str(i)) for i in range(10)] # Προς αφαίρεση, δοκιμαστικό
+players = [Player() for _ in range(10)] # Προς αφαίρεση, δοκιμαστικό
 splashscreen = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
 splashscreen.showSplash()
 splashscreen = None
 
 # Δημιουγούμε πλαίσιο παιχνιδιού, βάζουμε τίτλο και διαστάσεις. Κύριος βρόχος, μέσα σ' αυτόν τρέχουν
 # όλα τα άλλα αντικείμενα / καταστάσεις (menu, play_mode, high_scores, etc) 
-mil_game = MainGame("Εκατομμυριούχος", 1024, 600)
+mil_game = MainGame("Εκατομμυριούχος", 1280, 720)
 
 # Δημιουργούμε κατάσταση μενού, περνάμε το πλαίσιο παιχνίδιού για να αλλάζουμε καταστάσεις
 main_menu = MenuMode(mil_game)

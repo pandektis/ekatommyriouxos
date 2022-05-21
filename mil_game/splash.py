@@ -18,6 +18,7 @@ class SplashMode(object):
         # surface.blit(self.text, self.text_coords)
 
     def showSplash(self):
+        run = True
         a = 0
         self.s.fill((0,0,0))
         self.draw(self.s,a)
@@ -25,8 +26,16 @@ class SplashMode(object):
         pg.display.update()
         pg.mixer.music.set_volume(0.2)
         pg.mixer.music.play()    
-        while pg.mixer.music.get_busy():
-            pg.event.pump()
+        while run:
+            run = pg.mixer.music.get_busy()
+            for event in pg.event.get():
+                if event.type == pg.KEYDOWN:
+                                      
+                    if event.key == pg.K_q:
+                        print("PRESS Q")
+                        run = False
+            
+            
             self.draw(self.s, a)
             if a < 255:
                 self.s.blit(self.text, self.text_coords)
@@ -34,7 +43,8 @@ class SplashMode(object):
             
             pg.display.flip()
             clock.tick(30)
-        
+            
+        pg.mixer.music.stop()
         pg.display.quit()
 
 

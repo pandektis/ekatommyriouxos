@@ -7,8 +7,10 @@ class TimerModel:
 
 
     def __init__(self, seconds):
-        self.counter = seconds
-        self.isover = False
+        self.time_allowed = seconds
+        self.counter = self.time_allowed
+        self.is_over = False
+        self.is_paused = True
 
     
 
@@ -25,12 +27,21 @@ class TimerController:
         """ Ενημερώνουμε τον timer, είτε με USEREVENT είτε μετρώντας χειροκίνητα χρόνο.
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου.
         Όταν γίνει 0 ενημερώνουμε τη μεταβλητή του isover και την ελέγχει απ' έξω το παιχνίδι."""
-        if self.model.counter > 0:
+        if self.model.counter > 0 and not self.model.is_paused:
             self.model.counter -= 1
         elif self.model.counter == 0:
             self.model.isover = True
-            self.model.counter = 60
+            
 
+    def start(self):
+        self.reset()
+        self.model.is_paused = False
+
+    def pause(self):
+        self.model.is_paused = True
+
+    def reset_counter(self):
+        self.model.counter = self.model.time_allowed
 
 
 class TimerView:
@@ -50,6 +61,7 @@ class TimerView:
         Θέλει συμπλήρωση"""
         cur_offset = self.offset * self.timer.model.counter
         self.timer_surf.fill((0,0,255))
+        self.timer_surf.set_colorkey((0,0,255))
         
         pygame.draw.arc(self.timer_surf, (255,0,0), self.timer_surf.get_rect(),  pi /2, pi / 2 + cur_offset )
         

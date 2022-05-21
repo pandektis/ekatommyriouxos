@@ -18,6 +18,8 @@ class GameMode:
         self.game = game
         self.gameOverMode = gameOverMode
         self.time_allowed = 60
+        self.background_img = pygame.image.load("mil_game/images/set_mil.jpg")
+        # self.background_img = pygame.transform.scale(self.background_img, self.game.mainscreen.get_size())
         self.player_controller = PlayerController("Player")
         self.player_view = PlayerView(self.player_controller)
         self.question_controller = QuestionController()
@@ -35,8 +37,9 @@ class GameMode:
 
 
     def set_name(self, name):
-        self.player_controller.model.name = name
-        self.player_view.update_name()
+        if name:
+            self.player_controller.model.name = name
+            self.player_view.update_name()
 
     def update(self, gameTime, event_list):
         """ Γενική συνάρτηση για ενημέρωση όλων των αντικειμένων που αποτελούν το παιχνίδι
@@ -95,8 +98,7 @@ class GameMode:
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. 
         """
         ### Κώδικας για background και ό,τι άλλο δεν ανήκει σε κάποιο άλλο αντικείμενο
-        surface.fill((20,20,20))
-
+        surface.blit(self.background_img, (0,0))
         # Ζητάμε από κάθε View να εμφανίσει αυτά που έχει στην οθόνη
         for painter in self.views:
             painter.draw(surface)

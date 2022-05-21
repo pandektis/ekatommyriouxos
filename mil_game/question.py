@@ -1,6 +1,6 @@
 import pygame, os, sys
 from pygame.locals import *
-
+from button import Button
 # from View_ import RadioButton
 
 class Question:
@@ -102,12 +102,13 @@ class QuestionView:
     """ Κλάση υπεύθυνη για την εμφάνιση της τρέχουσας ερώτησης και απαντήσεων.
         Εδώ μπαίνει όλος ο κώδικας για τη δημιουργία και την εμφάνιση των buttons που εμφανίζουν
         την ερώτηση και τις απαντήσεις. Ο έλεγχος για το"""
-    pass
+    
 
     def __init__(self, q_controller):
         self.q_controller = q_controller # Ο αντίστοιχος controller, για να παίρνουμε τα στοιχεία και να του δώσουμε αναφορά στα buttons να ελέγχει. 
-        pass
+        self.rect = pygame.Rect(240, 30, 800, 600)
+        
 
     def draw(self, surface):
         """ Εμφάνιση της ερώτησης και των απαντήσεων"""
-        pass
+        pygame.draw.rect(surface, (120, 30, 58), self.rect, 1)

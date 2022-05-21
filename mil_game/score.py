@@ -13,21 +13,20 @@ class ScoreMode:
         self.players = players
         self.nextMode = nextMode
         self.bgImage = pygame.image.load('mil_game/images/ek_set.jpg').convert()
-        font50 = pygame.font.SysFont("Tahoma", 25)
-        self.menu_btn =Button(200,75, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', True)
-        self.menu_btn.add_text(font50, "MENOY", (255,0,0))
+        btn_font = pygame.font.SysFont(None, 25)
+        self.menu_btn =Button(200,50, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', True)
+        self.menu_btn.add_text(btn_font, "Μενού Επιλογών", (255,128,0))
         self.menu_btn.rect.bottom = self.game.mainscreen.get_rect().bottom - 20
-        self.buttons = [Button(700,30,pygame.Color(100,100,100)) for _ in range(10)]
+        self.buttons = [Button(700,50,pygame.Color(100,100,100), 'mil_game/images/btn_bg.png') for _ in range(10)]
         self.groupb = pygame.sprite.Group()
         self.inputTick = 0
-        h = 10
+        h = 50
         
         for btn, pl in zip(self.buttons, self.players):
-            print(btn, len(self.buttons))
-            print(pl, len(self.players))
-            btn.add_text(font50, str(pl), (255,0,0))
+            btn.add_text(btn_font, str(pl), (255,60,30))
+            btn.rect.x = 290
             btn.rect.y = h
-            h += btn.rect.height + 5
+            h += btn.rect.height + 15
             btn.add(self.groupb)
 
     def update(self, gameTime, event_list):
