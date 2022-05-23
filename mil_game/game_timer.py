@@ -22,25 +22,28 @@ class TimerController:
         """
     def __init__(self, time_total,):
         self.model = TimerModel(time_total)
+        self.COUNTDOWN = pygame.USEREVENT + 1
         
     def update(self, gameTime,  event_list):
         """ Ενημερώνουμε τον timer, είτε με USEREVENT είτε μετρώντας χειροκίνητα χρόνο.
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου.
         Όταν γίνει 0 ενημερώνουμε τη μεταβλητή του isover και την ελέγχει απ' έξω το παιχνίδι."""
-        if self.model.counter > 0 and not self.model.is_paused:
-            self.model.counter -= 1
-        elif self.model.counter == 0:
-            self.model.isover = True
+        for event in event_list:
+            if event.type == self.COUNTDOWN:
+                if self.model.counter > 0:
+                    self.model.counter -= 1
+                elif self.model.counter == 0:
+                    self.stop()
+                    self.model.isover = True
             
 
     def start(self):
-        self.reset()
-        self.model.is_paused = False
+        pygame.time.set_timer(self.COUNTDOWN,1000)
+        
+    def stop(self):
+        pygame.time.set_timer(self.COUNTDOWN, 0)
 
-    def pause(self):
-        self.model.is_paused = True
-
-    def reset_counter(self):
+    def reset(self):
         self.model.counter = self.model.time_allowed
 
 
@@ -49,10 +52,10 @@ class TimerView:
     def __init__(self, timer):
         self.timer = timer
         self.offset = (pi * 2) / self.timer.model.counter
-        self.rect = pygame.Rect(pygame.display.get_surface().get_rect().width // 2 - 100, pygame.display.get_surface().get_rect().height // 2 - 100,200,200 )
+        self.rect = pygame.Rect(pygame.display.get_surface().get_rect().width // 2 - 50, pygame.display.get_surface().get_rect().height // 2 - 50,100,100 )
         self.timer_surf = pygame.Surface(self.rect.size)
-        print(self.timer_surf.get_rect())
-        print(self.rect)
+        # print(self.timer_surf.get_rect())
+        # print(self.rect)
 
     def draw(self, surface):
         """
@@ -62,11 +65,11 @@ class TimerView:
         cur_offset = self.offset * self.timer.model.counter
         self.timer_surf.fill((0,0,255))
         self.timer_surf.set_colorkey((0,0,255))
-        
-        pygame.draw.arc(self.timer_surf, (255,0,0), self.timer_surf.get_rect(),  pi /2, pi / 2 + cur_offset )
-        
+        pygame.draw.arc(self.timer_surf, (255,0,0), self.timer_surf.get_rect(),  pi /2, pi / 2 + cur_offset, 10)
+        text_surf = pygame.font.Font(None, 30).render(str(self.timer.model.counter),True, (255,0,0))
+        # self.timer_surf.blit(text_surf, text_surf.get_rect(center = self.rect.center))
         surface.blit(self.timer_surf, self.rect)
-
+        surface.blit(text_surf, text_surf.get_rect(center = self.rect.center))
 
 #### Τεστ, to be deleted
 if __name__ == "__main__":

@@ -60,11 +60,11 @@ class GameMode:
                 if event.key == pygame.K_a:
                     print("PRESS A")
                     print("Response Time :", self.time_counter.model.counter)
-                    
+                    self.time_counter.start()
                 if event.key == pygame.K_b:
                     print("PRESS B")
                     print("Response Time :", self.time_counter.model.counter)
-                    
+                    self.time_counter.stop()
                 if event.key == pygame.K_c:
                     print("PRESS C")
                     print("Response Time :", self.time_counter.model.counter)

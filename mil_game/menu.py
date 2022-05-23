@@ -60,7 +60,6 @@ class MenuMode(object):
     """
     def __init__(self, game):
         self.game = game
-        self. inputTick = 0
         self.menuButtons = pygame.sprite.Group()
         self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg').convert()
         self.menuItems = ['Νέο παιχνίδι', 'Αποτελέσματα', 'Έξοδος']
@@ -87,25 +86,20 @@ class MenuMode(object):
 
             # surface.blit(btn.image,(surface.get_rect().width // 2 - btn.rect.width //2, surface.get_rect().height //3 + i * 160) )
         self.menuButtons.draw(surface)
+        for sp in self.menuButtons.sprites():
+            surface.blit(sp.text_image, sp.rect)
 
     def update(self, gameTime, event_list):
-        click = pygame.mouse.get_pressed()[0]
         pos = pygame.mouse.get_pos()
-        
-        if click and self.inputTick == 0:
-            self.inputTick = 250
-            for btn in self.menuButtons.sprites():
-                if btn.rect.collidepoint(pos):
-                    if(btn.msg == self.menuItems[0]):
-                        self.game.changeMode(InputMode(self.game, self.playmode))
-                        # self.game.changeMode(self.playmode)
-                    elif(btn.msg == self.menuItems[1]):
-                        self.game.changeMode(self.scoremode)
-                    elif(btn.msg == self.menuItems[2]):
-                        self.game.changeMode(None)
-        elif(self.inputTick > 0):
-            print("minus")
-            self.inputTick -= gameTime
-
-        if(self.inputTick < 0):
-            self.inputTick = 0
+        for event in event_list:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    for btn in self.menuButtons.sprites():
+                        if btn.rect.collidepoint(pos):
+                            if(btn.msg == self.menuItems[0]):
+                                self.game.changeMode(InputMode(self.game, self.playmode))
+                                # self.game.changeMode(self.playmode)
+                            elif(btn.msg == self.menuItems[1]):
+                                self.game.changeMode(self.scoremode)
+                            elif(btn.msg == self.menuItems[2]):
+                                self.game.changeMode(None)

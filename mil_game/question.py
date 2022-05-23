@@ -62,6 +62,7 @@ class QuestionModel:
         {"A" : κατάλογος ερωτήσεων Α δυσκολίας, "B" : κατάλογος ερωτήσεων Β δυσκολίας...}"""
         #αρχικοποίηση λεξικού
         self.questions = {"A": list(), "B": list(), "C": list()}
+        self.curent_level = "A"
         self.current_q = None
         #εισάγουμε το txt
         with open("Questions.txt", "r", encoding="UTF-8") as file:
@@ -106,9 +107,27 @@ class QuestionView:
 
     def __init__(self, q_controller):
         self.q_controller = q_controller # Ο αντίστοιχος controller, για να παίρνουμε τα στοιχεία και να του δώσουμε αναφορά στα buttons να ελέγχει. 
-        self.rect = pygame.Rect(240, 30, 800, 600)
+        self.rect = pygame.Rect(240, 30, 800, 670)
+        self.text_font = pygame.font.Font(None, 30)
+        self.question_btn = Button(800, 200, (0,0,0), 'mil_game/images/btn_bg.png')
+        self.question_btn.rect.topleft = self.rect.topleft
+        self.answers_group = pygame.sprite.Group()
+        for i in range (4):
+            btn = Button(400, 100, (0,0,0), 'mil_game/images/btn_bg.png', clickable =True)
+            self.answers_group.add(btn)
+            if i % 2:
+                btn.rect.bottomleft = self.rect.bottomleft
+            else:
+                btn.rect.bottomright = self.rect.bottomright
+            if i >= 2:
+                btn.rect.bottom -= (btn.rect.height + 20)
         
 
     def draw(self, surface):
         """ Εμφάνιση της ερώτησης και των απαντήσεων"""
-        pygame.draw.rect(surface, (120, 30, 58), self.rect, 1)
+        # pygame.draw.rect(surface, (120, 30, 58), self.rect, 1)
+        surface.blit(self.question_btn.image, self.question_btn.rect)
+        surface.blit(self.question_btn.text_image, self.question_btn.rect)
+        self.answers_group.draw(surface)
+        for ans in self.answers_group.sprites():
+            surface.blit(ans.text_image, ans.rect)
