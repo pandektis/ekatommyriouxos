@@ -15,6 +15,7 @@ class Button(pygame.sprite.Sprite):
         self.SIZE = width, height
         self.button_image = pygame.Surface(self.SIZE)
         self.text_image = self.button_image.copy()
+        self.text_image.set_colorkey((0,0,0))
         if clickable:
             self.clicked_image = self.button_image.copy()
             self.hover_image = self.button_image.copy()
@@ -50,7 +51,7 @@ class Button(pygame.sprite.Sprite):
                 i = text.rfind(" ", 0, i) + 1
                 y -= fontHeight // 2 - linespacing
 
-            images.append(font.render(text[:i], True, textColor))
+            images.append(font.render(text[:i], True, textColor,(0,0,0)))
             text = text[i:]
             
         for image in images:

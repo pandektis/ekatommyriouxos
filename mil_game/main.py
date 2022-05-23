@@ -1,5 +1,5 @@
 from game import MainGame
-from menu import MenuMode
+from menu import MenuMode  
 from splash import SplashMode
 from score import ScoreMode
 from player import Player

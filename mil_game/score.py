@@ -7,7 +7,6 @@ from player import Player
 
 class ScoreMode:
 
-
     def __init__(self, game, nextMode, players):
         self.game = game
         self.players = players

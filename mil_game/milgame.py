@@ -5,6 +5,37 @@ from player import *
 from button import Button
 from question import *
 from game_timer import *
+
+class RoundMsgMode:
+
+
+    def __init__(self, game, next_mode) -> None:
+        self.game = game
+        self.next_mode = next_mode
+        self.delay = 2000
+        self.msg = ""
+        self.overlay = pygame.Surface(self.game.mainscreen.get_size())
+        self.overlay.set_alpha(200)
+        self.overlay.fill((0,0,0))
+
+    def set_msg(self, msg):
+        msg_surf = pygame.font.Font.render(None,msg,True, (255,0,0), (0,0,0))
+        msg_surf.set_colorkey((0,0,0))
+        self.overlay.blit(msg_surf, msg_surf.get_rect(center = self.overlay.get_rect.center) )
+
+    def update(self, gameTime, event_list):
+        if self.delay <= 0:
+            self.game.changeMode(self.next_mode)
+            self.delay = 2000
+        self.delay -= gameTime
+        
+
+    def draw(self, surface):
+        surface.blit(self.overlay, (0,0))
+        pass
+
+
+
 class GameMode:
     """
     Κατάσταση παιχνιδιού Παιχνίδι.
