@@ -3,14 +3,14 @@ from pygame.locals import *
 from game import *
 from button import Button
 
-class InputMode(object):
+class InputMode(BaseMode):
     """
     Κλάση για είσοδο του ονόματος
     Αποτελεί μία κατάσταση (mode) του παιχνιδιού
     """
 
     def __init__(self, game, nextMode):
-        self.game = game
+        super().__init__(game)
         self.nextMode = nextMode
         width, height = pygame.display.get_window_size()
         self.background_img = pygame.image.load('mil_game/images/ek_set.jpg')
@@ -53,20 +53,20 @@ class InputMode(object):
         surface.blit(input_surf, (self.input_rect.left +4, self.input_rect.top +5))
 
 
-class MenuMode(object):
+class MenuMode(BaseMode):
     """
     Κατάσταση παιχνιδιού Μενού.
     Το κυρίως μενού του παιχνιδιού
     """
     def __init__(self, game):
-        self.game = game
+        super().__init__(game)
         self.menuButtons = pygame.sprite.Group()
         self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg').convert()
         self.menuItems = ['Νέο παιχνίδι', 'Αποτελέσματα', 'Έξοδος']
         font_size = 25
         btn_font = pygame.font.SysFont(None, font_size)
         for item in self.menuItems:
-            btn = Button(200,font_size *2, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', True)
+            btn = Button(200,font_size *2, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', clickable = True)
             btn.add_text(btn_font, item, (255,128,0))
             btn.add(self.menuButtons)
 

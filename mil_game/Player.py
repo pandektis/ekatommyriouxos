@@ -12,6 +12,7 @@ class Player:
         self.name = name #
         self.lives = 3 # Αριθμός 'ζωών', δλδ πόσα λάθη μπορεί να κάνει.
         self.possible_earnings = (100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000, 100000, 250000, 500000, 1000000)
+        self.amount_pointer = -1
         self.poso = 0
         self.num_questions = 0
         self.total_time = 0.0
@@ -65,29 +66,29 @@ class PlayerView:
     def __init__(self, player_ctrl):
         self.player = player_ctrl
         self.view_font = pygame.font.Font(None, 36)
-        self.amount_font = pygame.font.Font(None, 50)
         self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (255,0,0))
-        self.active_color = pygame.Color('yellow')
-        self.inactive_color = pygame.Color('blue')
-        btn_w, btn_h = self.amount_font.size('  €1.000.000  ')
-        self.buttons = pygame.sprite.Group()
-        #self.buttons = [Button(btn_w, btn_h, pygame.Color('lightblue'),'mil_game/images/btn_bg.png' ) for _ in len(player_ctrl.model.possible_earnings)]
-        self.amount_rect = pygame.Rect(1050, 30, btn_w, (btn_h + 5) *len(self.player.model.possible_earnings))
-        temp_y = self.amount_rect.top
-        for amount in sorted(self.player.model.possible_earnings, reverse=True):
-            btn = Button(btn_w, btn_h + 10, (0,0,0), 'mil_game/images/btn_bg.png')
-            btn.add_text(self.amount_font, str(amount), self.inactive_color)
-            btn.rect.x = self.amount_rect.left
-            btn.rect.y = temp_y
-            btn.add(self.buttons)
-            temp_y += (btn_h + 10)        
-
+        self.a_left = 1100
+        self.a_right = 1245
+        self.a_y = 560
+        self.a_hor_offset = 10
+        self.a_vert_offset = 15
+        
+        
+        
+        
     def update_name(self):
-        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (255,0,0))
+        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (0,0,0))
+        self.name_surf.set_colorkey((0,0,0,))
     
     def draw(self, surface):
-        surface.blit(self.name_surf, (50,50))
-        self.buttons.draw(surface)
+        x , z = self.a_left, self.a_right
+        a, b = self.a_hor_offset, self.a_vert_offset
+        surface.blit(self.name_surf, (150,250))
+        for i in range(len(self.player.model.possible_earnings)):
+            if i <= self.player.model.amount_pointer:
+                y = self.a_y - (2*b + 2) * i
+                coords = [(x, y), (x+a, y - b), (z - a, y - b), (z, y), (z - a, y +b), (x + a, y + b),(x,y)]
+                pygame.draw.polygon(surface, 'yellow',coords, 1)
 
 
 

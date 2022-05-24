@@ -5,10 +5,10 @@ from game import *
 from button import Button
 from player import Player
 
-class ScoreMode:
+class ScoreMode(BaseMode):
 
     def __init__(self, game, nextMode, players):
-        self.game = game
+        super().__init__(game)
         self.players = players
         self.nextMode = nextMode
         self.bgImage = pygame.image.load('mil_game/images/ek_set.jpg').convert()

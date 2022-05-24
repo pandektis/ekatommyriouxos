@@ -1,6 +1,24 @@
 import pygame, os, sys
 from pygame.locals import *
 
+class BaseMode(object):
+
+
+    def __init__(self, game) -> None:
+        self.game = game
+
+    def onEnter(self):
+        pass
+
+    def onExit(self):
+        pass
+
+    def update(self, gameTime, event_list):
+        pass
+
+    def draw(self, surface):
+        pass
+
 class MainGame(object):
     """
     Κλάση για την υλοποίηση του κυρίως βρόχου του παιχνιδιού
@@ -23,11 +41,16 @@ class MainGame(object):
         Αλλάζουμε κατάσταση παιχνιδιού.
         Αν δεν υπάρχει κατάσταση, τερματίζουμε το παιχνίδι
         """
+
+        if(self.currentMode):
+            self.currentMode.onExit()
+
         if(newMode == None):
             pygame.quit()
             sys.exit()
             
         self.currentMode = newMode
+        newMode.onEnter()
 
 
     def play(self, startMode):

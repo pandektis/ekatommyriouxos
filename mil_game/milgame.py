@@ -1,27 +1,31 @@
 import pygame, os, sys
 from pygame.locals import *
 
+from game import *
 from player import *
 from button import Button
 from question import *
 from game_timer import *
 
-class RoundMsgMode:
+class RoundMsgMode(BaseMode):
 
 
     def __init__(self, game, next_mode) -> None:
-        self.game = game
+        super().__init__(game)
         self.next_mode = next_mode
         self.delay = 2000
-        self.msg = ""
+        self.msg = "Επόμενη ερώτηση"
         self.overlay = pygame.Surface(self.game.mainscreen.get_size())
         self.overlay.set_alpha(200)
-        self.overlay.fill((0,0,0))
+        self.overlay.fill((0,0,0,200))
+        msg_font = pygame.font.Font(None, 30)
+        self.msg_surf = pygame.font.Font.render(msg_font,self.msg,True, (255,0,0), (0,0,0))
+        self.msg_surf.set_colorkey((0,0,0))
 
     def set_msg(self, msg):
-        msg_surf = pygame.font.Font.render(None,msg,True, (255,0,0), (0,0,0))
-        msg_surf.set_colorkey((0,0,0))
-        self.overlay.blit(msg_surf, msg_surf.get_rect(center = self.overlay.get_rect.center) )
+        self.msg_surf = pygame.font.Font.render(None,msg,True, (255,0,0), (0,0,0))
+        self.msg_surf.set_colorkey((0,0,0))
+        
 
     def update(self, gameTime, event_list):
         if self.delay <= 0:
@@ -31,12 +35,12 @@ class RoundMsgMode:
         
 
     def draw(self, surface):
-        surface.blit(self.overlay, (0,0))
-        pass
+        surface.blit(self.msg_surf, (0,0))
+        
 
 
 
-class GameMode:
+class GameMode(BaseMode):
     """
     Κατάσταση παιχνιδιού Παιχνίδι.
 
@@ -46,10 +50,11 @@ class GameMode:
     από τα περιεχόμενα αντικείμενα.    
     """
     def __init__(self, game, gameOverMode):
-        self.game = game
+        super().__init__(game)
         self.gameOverMode = gameOverMode
         self.time_allowed = 60
-        self.background_img = pygame.image.load("mil_game/images/set_mil.jpg")
+        self.endRound = False
+        self.background_img = pygame.image.load("mil_game/images/game_bg.png")
         # self.background_img = pygame.transform.scale(self.background_img, self.game.mainscreen.get_size())
         self.player_controller = PlayerController("Player")
         self.player_view = PlayerView(self.player_controller)
@@ -57,20 +62,32 @@ class GameMode:
         self.time_counter = TimerController(self.time_allowed)
         self.controllers = None
         self.views = None
-        
         self.setup()
 
     def setup(self):
-        question_view = QuestionView(self.question_controller)
+        self.question_view = QuestionView(self.question_controller)
         timer_view = TimerView(self.time_counter)
         self.controllers = [self.question_controller, self.player_controller, self.time_counter]
-        self.views = [self.player_view, question_view, timer_view]
-
+        self.views = [self.player_view, self.question_view, timer_view]
 
     def set_name(self, name):
         if name:
             self.player_controller.model.name = name
             self.player_view.update_name()
+
+
+    def onEnter(self):
+        self.endRound = False
+        self.question_controller.model.set_question()
+        print(self.question_controller.model.current_q)
+        print("amount pointer ", self.player_controller.model.amount_pointer)
+        self.question_view.add_messages()
+        self.time_counter.reset()
+
+    def onExit(self):
+        self.question_controller.reset()
+        
+
 
     def update(self, gameTime, event_list):
         """ Γενική συνάρτηση για ενημέρωση όλων των αντικειμένων που αποτελούν το παιχνίδι
@@ -78,7 +95,11 @@ class GameMode:
         αν έχει γίνει κάποια αλλαγή.
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. """
         # Ζητάμε από κάθε αντικείμενο που αποτελεί το παρόν mode παιχνιδιού να κάνει τους ελέγχους και τις ενημερώσεις.
-
+        if self.endRound:
+            self.game.changeMode(RoundMsgMode(self.game, self))
+            self.endRound = False
+            return
+        
         for manager in self.controllers:
             manager.update(gameTime, event_list)
         
@@ -86,39 +107,34 @@ class GameMode:
         # Παράδειγμα ακολουθεί. Αυτές τις συνθήκες /ελέγχους βέβαια μπορούμε να τις μοιράσουμε 
         # στα αντικείμενά που θέλουμε να ελέγξουμε
         #
-        for event in event_list:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_a:
-                    print("PRESS A")
-                    print("Response Time :", self.time_counter.model.counter)
-                    self.time_counter.start()
-                if event.key == pygame.K_b:
-                    print("PRESS B")
-                    print("Response Time :", self.time_counter.model.counter)
-                    self.time_counter.stop()
-                if event.key == pygame.K_c:
-                    print("PRESS C")
-                    print("Response Time :", self.time_counter.model.counter)
-                   
-                if event.key == pygame.K_d:
-                    print("PRESS D")
-                    print("Response Time :", self.time_counter.model.counter)
-                    
-                if event.key == pygame.K_5:
-                    print("PRESS 5")
-                
-                    
-                if event.type == pygame.K_q:
-                    print("PRESS Q")
-                    pygame.quit();
-        
+      
 
-        # εδώ αντί για event, ρωτάμε ένα αντικείμενο αν έγινε κάτι.
-        if(self.player_controller.model.lives == 0):
-            pass #game over
+        # ρωτάμε τα αντικείμενα αν έγινε κάτι, και πράττουμε ανάλογα
+        if self.question_controller.show_answers:
+            if not self.time_counter.is_running:
+                self.time_counter.start()
 
-        
-        
+        if self.question_controller.chosen != None:
+            self.time_counter.stop()
+            if self.question_controller.check_answer():
+                self.player_controller.model.amount_pointer += 1
+            else:
+                self.player_controller.model.lives -= 1
+            self.endRound = True
+
+        elif self.time_counter.model.is_over:
+            print("time counter isover ", self.time_counter.model.is_over)
+            for btn in self.question_controller.q_view.ans_group.sprites():
+                if btn.clicked:
+                    self.question_controller.chosen = btn
+
+                    print("btn msg", btn.msg)
+                    break
+            if self.question_controller.chosen != None and self.question_controller.check_answer():
+                self.player_controller.model.amount_pointer += 1
+            else:
+                self.player_controller.model.lives -= 1
+            self.endRound = True
         
 
     def draw(self, surface):

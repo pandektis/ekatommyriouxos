@@ -1,6 +1,8 @@
+import random
 import pygame, os, sys
 from pygame.locals import *
-from button import Button
+from button import *
+
 # from View_ import RadioButton
 
 class Question:
@@ -81,23 +83,65 @@ class QuestionModel:
                     self.questions[question.level].append(question)
                     #στο επόμενο σετ ερωτήσεων-απαντήσεων
                     i += 5
+        w, h = 380, 65
+        top_row_y = 465
+        bottom_row_y = 545
+        left_col_x = 130
+        right_col_x = 605
+        self.q_rect = pygame.Rect(130,35,840,130)
+        self.ansA_rect = pygame.Rect(left_col_x, top_row_y, w, h)
+        self.ansB_rect = pygame.Rect(right_col_x, top_row_y, w, h)
+        self.ansC_rect = pygame.Rect(left_col_x, bottom_row_y, w, h)
+        self.ansD_rect = pygame.Rect(right_col_x, bottom_row_y, w, h)
 
-
-    
-
-        
+    def set_question(self):
+        if self.questions[self.curent_level]:
+            question_number = random.randint(0, len(self.questions[self.curent_level])-1)
+            self.current_q = self.questions[self.curent_level].pop(question_number)
                                     
+    def unset_question(self):
+        self.current_q = None
+
+
 class QuestionController:
     """ Κλάση που εκτελέι τους ελέγχους και ενημερώνει την QuestionModel
         Έχει μέθοδο update() που μέσα γίνονται οι έλεγχοι για το κλικ, και αντίστοιχα
         (Η update() τρέχει σε κάθε frame του game loop, είναι σα να είχαμε κώδικα μέσα στο while του gameloop)
     """
     def __init__(self):
-        self.qmodel = QuestionModel() # φόρτωμα των ερωτήσεων.
-    pass
+        self.model = QuestionModel() # φόρτωμα των ερωτήσεων.
+        self.delay = 3000
+        self.show_answers = False
+        self.chosen = None
+    
+    def set_view(self, view):
+        self.q_view = view
+
+
+    def reset(self):
+        self.delay = 3000
+        self.show_answers = False
+        self.chosen = None
+        self.q_view.question_btn.setup()
+        for a in self.q_view.ans_group.sprites():
+            a.setup()
+            a.clicked = False
+
+    def check_answer(self):
+        return self.chosen.msg == self.model.current_q.answers[self.model.current_q.correct_answer]
 
     def update(self, gameTime, event_list):
-        pass
+        if self.delay > 0:
+            self.delay -= gameTime
+            return
+        self.show_answers = True
+        pos = pygame.mouse.get_pos()
+        self.q_view.ans_group.update(event_list, pos)
+        for ans_btn in self.q_view.ans_group.sprites():
+            if ans_btn.chosen:
+                self.chosen = ans_btn
+
+
 
 class QuestionView:
     """ Κλάση υπεύθυνη για την εμφάνιση της τρέχουσας ερώτησης και απαντήσεων.
@@ -109,25 +153,31 @@ class QuestionView:
         self.q_controller = q_controller # Ο αντίστοιχος controller, για να παίρνουμε τα στοιχεία και να του δώσουμε αναφορά στα buttons να ελέγχει. 
         self.rect = pygame.Rect(240, 30, 800, 670)
         self.text_font = pygame.font.Font(None, 30)
-        self.question_btn = Button(800, 200, (0,0,0), 'mil_game/images/btn_bg.png')
-        self.question_btn.rect.topleft = self.rect.topleft
-        self.answers_group = pygame.sprite.Group()
-        for i in range (4):
-            btn = Button(400, 100, (0,0,0), 'mil_game/images/btn_bg.png', clickable =True)
-            self.answers_group.add(btn)
-            if i % 2:
-                btn.rect.bottomleft = self.rect.bottomleft
-            else:
-                btn.rect.bottomright = self.rect.bottomright
-            if i >= 2:
-                btn.rect.bottom -= (btn.rect.height + 20)
+        self.ans_group = pygame.sprite.Group()
+        self.question_btn = QAButton([], self.q_controller.model.q_rect)
+        self.ansA_btn = QAButton(self.ans_group, self.q_controller.model.ansA_rect)
+        self.ansB_btn = QAButton(self.ans_group, self.q_controller.model.ansB_rect)
+        self.ansC_btn = QAButton(self.ans_group, self.q_controller.model.ansC_rect)
+        self.ansD_btn = QAButton(self.ans_group, self.q_controller.model.ansD_rect)
+
+        ans_buttons = self.ans_group.sprites()
+        for ans in ans_buttons:
+            ans.setRadioButtons(ans_buttons)
+        self.q_controller.set_view(self)
         
+    def add_messages(self):
+        self.question_btn.add_text(pygame.font.Font(None, 40), self.q_controller.model.current_q.question,(60,128,156))
+        for i, btn in enumerate(self.ans_group.sprites()):
+            btn.add_text(pygame.font.Font(None, 30), self.q_controller.model.current_q.answers[i], (60, 28, 156))
+    
+    def remove_messages(self):
+        self.question_btn.setup()
+        for btn in self.ans_group.sprites():
+            btn.setup()
 
     def draw(self, surface):
         """ Εμφάνιση της ερώτησης και των απαντήσεων"""
-        # pygame.draw.rect(surface, (120, 30, 58), self.rect, 1)
-        surface.blit(self.question_btn.image, self.question_btn.rect)
-        surface.blit(self.question_btn.text_image, self.question_btn.rect)
-        self.answers_group.draw(surface)
-        for ans in self.answers_group.sprites():
-            surface.blit(ans.text_image, ans.rect)
+        surface.blit(self.question_btn.image, self.q_controller.model.q_rect)
+        if self.q_controller.show_answers:
+            self.ans_group.draw(surface)
+        
