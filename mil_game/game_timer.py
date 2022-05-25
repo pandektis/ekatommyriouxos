@@ -42,7 +42,7 @@ class TimerController:
 
     def start(self):
         pygame.time.set_timer(self.COUNTDOWN,1000)
-        self.is_running = True
+        self.model.is_running = True
         
     def stop(self):
         pygame.time.set_timer(self.COUNTDOWN, 0)

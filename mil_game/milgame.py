@@ -111,7 +111,7 @@ class GameMode(BaseMode):
 
         # ρωτάμε τα αντικείμενα αν έγινε κάτι, και πράττουμε ανάλογα
         if self.question_controller.show_answers:
-            if not self.time_counter.is_running:
+            if not self.time_counter.model.is_running:
                 self.time_counter.start()
 
         if self.question_controller.chosen != None:
