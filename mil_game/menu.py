@@ -13,7 +13,7 @@ class InputMode(BaseMode):
         super().__init__(game)
         self.nextMode = nextMode
         width, height = pygame.display.get_window_size()
-        self.background_img = pygame.image.load('mil_game/images/ek_set.jpg')
+        self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg')
         self.background_img = pygame.transform.scale(self.background_img, (width, height))
         self.font_size = 28
         self.msg_font = pygame.font.Font(None, self.font_size)

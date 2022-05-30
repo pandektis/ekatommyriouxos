@@ -6,6 +6,7 @@ from player import *
 from button import Button
 from question import *
 from game_timer import *
+from helpers import *
 
 class RoundMsgMode(BaseMode):
 
@@ -60,15 +61,17 @@ class GameMode(BaseMode):
         self.player_view = PlayerView(self.player_controller)
         self.question_controller = QuestionController()
         self.time_counter = TimerController(self.time_allowed)
+        self.helper_controller = HelpersController()
         self.controllers = None
         self.views = None
         self.setup()
 
     def setup(self):
         self.question_view = QuestionView(self.question_controller)
+        helpers_view = HelpersView(self.helper_controller)
         timer_view = TimerView(self.time_counter)
-        self.controllers = [self.question_controller, self.player_controller, self.time_counter]
-        self.views = [self.player_view, self.question_view, timer_view]
+        self.controllers = [self.question_controller, self.player_controller, self.time_counter, self.helper_controller]
+        self.views = [self.player_view, self.question_view, timer_view, helpers_view]
 
     def set_name(self, name):
         if name:
@@ -136,6 +139,10 @@ class GameMode(BaseMode):
                 self.player_controller.model.lives -= 1
             self.endRound = True
         
+        if self.helper_controller.done:
+            for helper in self.helper_controller.helpers:
+                if helper.is_clicked:
+                    print(helper.name)
 
     def draw(self, surface):
         """Συνάρτηση για την εμφάνιση της οθόνης του παιχνιδιού

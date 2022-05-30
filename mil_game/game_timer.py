@@ -82,20 +82,3 @@ class TimerView:
         surface.blit(self.timer_surf, self.rect)
         surface.blit(text_surf, text_surf.get_rect(center = self.rect.center))
 
-#### Τεστ, to be deleted
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((800,600))
-    # model = TimerModel(60)
-    cntrler = TimerController(60)
-    timer_view = TimerView(cntrler)
-    fps = pygame.time.Clock()
-    while True:
-        events = pygame.event.get()
-        for event in events:
-            if event.type == QUIT:
-                pygame.quit()
-        cntrler.update(None, None)
-        timer_view.draw(screen)
-        pygame.display.update()
-        fps.tick(1) # έχω βάλει 1 εδώ για επίδειξη μόνο, κανονικά ελέγχουμε το χρόνο με το event, ή μέσα στην update()
