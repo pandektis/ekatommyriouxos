@@ -98,6 +98,8 @@ class QuestionModel:
         if self.questions[self.curent_level]:
             question_number = random.randint(0, len(self.questions[self.curent_level])-1)
             self.current_q = self.questions[self.curent_level].pop(question_number)
+        else:
+            print("No more questions in list... start new game")
                                     
     def unset_question(self):
         self.current_q = None
@@ -122,6 +124,7 @@ class QuestionController:
         self.delay = 3000
         self.show_answers = False
         self.chosen = None
+        self.q_view.remove_messages()
         self.q_view.question_btn.setup()
         for a in self.q_view.ans_group.sprites():
             a.setup()
@@ -129,6 +132,14 @@ class QuestionController:
 
     def check_answer(self):
         return self.chosen.msg == self.model.current_q.answers[self.model.current_q.correct_answer]
+
+    def take_help_action(self, name):
+        if name == 'fifty':
+            print("the name is", name)
+        elif name == 'computer':
+            print("the name is", name)
+        elif name == 'other':
+            print("the name is", name)
 
     def update(self, gameTime, event_list):
         if self.delay > 0:

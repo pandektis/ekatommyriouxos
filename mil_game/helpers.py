@@ -23,16 +23,21 @@ class HelpersController:
             tmp_rect = pygame.Rect(x + (width * i), y, width, height)
             self.helpers.append(Helper(tmp_rect, names[i]))
         self.done = False
+        self.inactive_helpers = []
+        self.current_helper = None
 
     def update(self, gameTime, event_list):
-            if self.done:
+            if self.done or not self.helpers:
                 return
             pos = pygame.mouse.get_pos()
             for event in event_list:
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    for helper in self.helpers:
+                    for helper in self.helpers[:]:
                         if helper.rect.collidepoint(pos):
-                            helper.is_clicked = True
+                            self.inactive_helpers.append(helper)
+                            self.helpers.remove(helper)
+                            self.current_helper = helper
+                            # helper.is_clicked = True
                             self.done = True
 
 class HelpersView:
@@ -45,8 +50,8 @@ class HelpersView:
         pygame.draw.line(self.image, (255,0,0), self.image.get_rect().topleft, self.image.get_rect().bottomright, 4)
 
     def draw(self, surface):
-        for helper in self.controller.helpers:
-            if helper.is_clicked:
+        for helper in self.controller.inactive_helpers:
+            # if helper.is_clicked:
                 
-                surface.blit(self.image, helper.rect)
+            surface.blit(self.image, helper.rect)
                 # pygame.draw.line(surface, (255,0,0), helper.rect.topleft, helper.rect.bottomright, 4)

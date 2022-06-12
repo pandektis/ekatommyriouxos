@@ -11,11 +11,11 @@ from helpers import *
 class RoundMsgMode(BaseMode):
 
 
-    def __init__(self, game, next_mode) -> None:
+    def __init__(self, game, next_mode, msg = "Επόμενη ερώτηση" ) -> None:
         super().__init__(game)
         self.next_mode = next_mode
         self.delay = 2000
-        self.msg = "Επόμενη ερώτηση"
+        self.msg = msg
         self.overlay = pygame.Surface(self.game.mainscreen.get_size())
         self.overlay.set_alpha(200)
         self.overlay.fill((0,0,0,200))
@@ -36,7 +36,7 @@ class RoundMsgMode(BaseMode):
         
 
     def draw(self, surface):
-        surface.blit(self.msg_surf, (0,0))
+        surface.blit(self.msg_surf, (200,200))
         
 
 
@@ -78,12 +78,20 @@ class GameMode(BaseMode):
             self.player_controller.model.name = name
             self.player_view.update_name()
 
+    def reset_all(self):
+        self.question_controller.reset()
+        self.helper_controller.done = False
 
     def onEnter(self):
         self.endRound = False
+        if self.player_controller.model.amount_pointer == 4:
+            self.question_controller.model.curent_level = "B"
+        elif self.player_controller.model.amount_pointer == 9:
+            self.question_controller.model.curent_level = "C"
+        
         self.question_controller.model.set_question()
         print(self.question_controller.model.current_q)
-        print("amount pointer ", self.player_controller.model.amount_pointer)
+        print("amount pointer ", self.player_controller.model.amount_pointer, "Current level", self.question_controller.model.curent_level)
         self.question_view.add_messages()
         self.time_counter.reset()
 
@@ -94,13 +102,15 @@ class GameMode(BaseMode):
 
     def update(self, gameTime, event_list):
         """ Γενική συνάρτηση για ενημέρωση όλων των αντικειμένων που αποτελούν το παιχνίδι
-        Καλεί τις ξεχωριστές update κάθε αντικειμένου ώστε να ενημερωθούν το καθένα μόνο του
-        αν έχει γίνει κάποια αλλαγή.
+        Καλεί τις ξεχωριστές update κάθε αντικειμένου ώστε να ενημερωθεί το καθένα μόνο του
+        Ελέγχει αν έχει γίνει κάποια αλλαγή.
         Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. """
         # Ζητάμε από κάθε αντικείμενο που αποτελεί το παρόν mode παιχνιδιού να κάνει τους ελέγχους και τις ενημερώσεις.
         if self.endRound:
             self.game.changeMode(RoundMsgMode(self.game, self))
             self.endRound = False
+            # self.question_controller.reset()
+            self.reset_all()
             return
         
         for manager in self.controllers:
@@ -123,7 +133,9 @@ class GameMode(BaseMode):
                 self.player_controller.model.amount_pointer += 1
             else:
                 self.player_controller.model.lives -= 1
+            self.player_controller.model.num_questions += 1
             self.endRound = True
+            # self.question_controller.reset()
 
         elif self.time_counter.model.is_over:
             print("time counter isover ", self.time_counter.model.is_over)
@@ -137,12 +149,12 @@ class GameMode(BaseMode):
                 self.player_controller.model.amount_pointer += 1
             else:
                 self.player_controller.model.lives -= 1
+            self.player_controller.model.num_questions += 1
             self.endRound = True
         
-        if self.helper_controller.done:
-            for helper in self.helper_controller.helpers:
-                if helper.is_clicked:
-                    print(helper.name)
+        elif self.helper_controller.done and self.helper_controller.current_helper != None:
+            self.question_controller.take_help_action(self.helper_controller.current_helper.name)
+            self.helper_controller.current_helper = None
 
     def draw(self, surface):
         """Συνάρτηση για την εμφάνιση της οθόνης του παιχνιδιού

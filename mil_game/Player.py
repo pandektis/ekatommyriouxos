@@ -11,7 +11,7 @@ class Player:
     def __init__(self, name = "Player"):
         self.name = name #
         self.lives = 3 # Αριθμός 'ζωών', δλδ πόσα λάθη μπορεί να κάνει.
-        self.possible_earnings = (100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000, 100000, 250000, 500000, 1000000)
+        self.possible_earnings = (100, 200, 300, 500, 1000, 2000, 4000, 8000, 16000, 25000, 50000, 100000, 250000, 500000, 1000000)
         self.amount_pointer = -1
         self.poso = 0
         self.num_questions = 0
@@ -90,10 +90,4 @@ class PlayerView:
                 coords = [(x, y), (x+a, y - b), (z - a, y - b), (z, y), (z - a, y +b), (x + a, y + b),(x,y)]
                 pygame.draw.polygon(surface, 'yellow',coords, 1)
 
-
-
-
-
-    # Για να τρέχει ξεχωριστά το αρχείο, για testing
-    if __name__ == "__main__":
-        pass
+   
