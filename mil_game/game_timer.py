@@ -77,7 +77,7 @@ class TimerView:
         self.timer_surf.fill((0,0,255))
         self.timer_surf.set_colorkey((0,0,255))
         pygame.draw.arc(self.timer_surf, (255,0,0), self.timer_surf.get_rect(),  pi /2, pi / 2 + cur_offset, 28)
-        text_surf = pygame.font.Font(None, 30).render(str(self.timer.model.counter),True, (255,0,0))
+        text_surf = pygame.font.Font(None, 60).render(str(self.timer.model.counter),True, (255,0,0))
         # self.timer_surf.blit(text_surf, text_surf.get_rect(center = self.rect.center))
         surface.blit(self.timer_surf, self.rect)
         surface.blit(text_surf, text_surf.get_rect(center = self.rect.center))

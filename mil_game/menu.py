@@ -90,6 +90,9 @@ class MenuMode(BaseMode):
         for sp in self.menuButtons.sprites():
             surface.blit(sp.text_image, sp.rect)
 
+    def onEnter(self, oldMode):
+        self.setPlayMode()
+
     def update(self, gameTime, event_list):
         pos = pygame.mouse.get_pos()
         for event in event_list:

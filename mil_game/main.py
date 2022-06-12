@@ -32,6 +32,6 @@ high_scores = ScoreMode(mil_game,main_menu)
 
 # Ορίζουμε την κατάσταση αποτελέσματα για το αντίστοιχο κουμπί του menu
 main_menu.setScoreMode(high_scores)
-main_menu.setPlayMode()
+# main_menu.setPlayMode()
 # Ξεκινάμε το παιχνίδι
 mil_game.play(main_menu)

@@ -20,7 +20,7 @@ class Player:
         self.daep = 0.0
 
     def __str__(self):
-        return f"{self.name:^12}|{self.poso:>10}€|{self.total_time:>7} sec|{self.m_o:>7} sec/q|{self.daep:>7}"
+        return f"{self.name:^12}|{self.poso:>10}€|{self.total_time:>7.1f} sec|{self.m_o:>7.2f} sec/q|{self.daep:>7.4f}"
 
     def _calc_mo(self):
         """ Υπολογισμός Μ.Ο. χρόνου ανά ερώτηση"""

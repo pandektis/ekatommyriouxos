@@ -28,9 +28,7 @@ class ScoreMode(BaseMode):
         except:
             for i in range(10):
                 self.players.append(Player("Player " + str(i+1)))
-                # print(self.players[i])
-
-        
+              
 
 
     def onEnter(self, oldMode):
@@ -38,12 +36,13 @@ class ScoreMode(BaseMode):
         print(type(self.players))
         print(self.players == [])
     
-        self.players.append(self.curr_player)
-        for pl in self.players:
-            print(pl)
+        if self.curr_player:
+            self.players.append(self.curr_player)
+            self.curr_player = None
+
+        
         self.players.sort(key = lambda pl : pl.daep, reverse=True)
-        for i, pl in enumerate(self.players):
-            print(i, " -> ",pl)
+        
         self.players = self.players[:10]
 
         for btn, pl in zip(self.buttons, self.players):
