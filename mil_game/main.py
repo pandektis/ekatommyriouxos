@@ -25,14 +25,13 @@ mil_game = MainGame("Εκατομμυριούχος", 1280, 720)
 main_menu = MenuMode(mil_game)
 
 # Δημιουργούμε αντικείμενο αποτελέσματα, περνάμε παιχνίδι, επόμενη κατάσταση, και παίκτες προς εμφάνιση
-high_scores = ScoreMode(mil_game,main_menu,players)
+high_scores = ScoreMode(mil_game,main_menu)
 
 #ορίζουμε την play_mode, η κατάσταση που παίζει όλο το παιχνίδι
-play_mode = GameMode(mil_game, high_scores)
+#play_mode = GameMode(mil_game, high_scores)
 
 # Ορίζουμε την κατάσταση αποτελέσματα για το αντίστοιχο κουμπί του menu
-main_menu.setPlayMode(play_mode)
 main_menu.setScoreMode(high_scores)
-
+main_menu.setPlayMode()
 # Ξεκινάμε το παιχνίδι
 mil_game.play(main_menu)

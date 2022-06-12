@@ -57,6 +57,8 @@ class Button(pygame.sprite.Sprite):
         for image in images:
             self.text_image.blit(image, (self.rect.centerx - image.get_rect().width // 2, y))
             y += fontHeight + linespacing
+        
+        self.image.blit(self.text_image, (0,0))
 
 class QAButton(pygame.sprite.Sprite):
 

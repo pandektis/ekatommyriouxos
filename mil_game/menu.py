@@ -1,6 +1,7 @@
 import pygame, os, sys
 from pygame.locals import *
 from game import *
+from milgame import *
 from button import Button
 
 class InputMode(BaseMode):
@@ -27,7 +28,7 @@ class InputMode(BaseMode):
         self.msg_rect.midbottom = width / 2, height / 2
         self.input_rect.midtop = width / 2, height / 2
         self.overlay = pygame.Surface((width, height))
-        self.overlay.set_alpha(210)
+        self.overlay.set_alpha(150)
         self.overlay.fill((0,0,0))
 
 
@@ -71,8 +72,8 @@ class MenuMode(BaseMode):
             btn.add(self.menuButtons)
 
     # Θέτουμε την κατάσταση για νέο παιχνίδι
-    def setPlayMode(self, mode):
-        self.playmode = mode
+    def setPlayMode(self):
+        self.playmode = GameMode(self.game, self.scoremode)
 
     # Θέτουμε την κατάσταση για εμφάνιση αποτελεσμάτων.
     def setScoreMode(self, mode):

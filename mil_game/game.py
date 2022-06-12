@@ -7,7 +7,7 @@ class BaseMode(object):
     def __init__(self, game) -> None:
         self.game = game
 
-    def onEnter(self):
+    def onEnter(self, oldMode):
         pass
 
     def onExit(self):
@@ -48,9 +48,10 @@ class MainGame(object):
         if(newMode == None):
             pygame.quit()
             sys.exit()
-            
+
+        oldMode = self.currentMode    
         self.currentMode = newMode
-        newMode.onEnter()
+        newMode.onEnter(oldMode)
 
 
     def play(self, startMode):

@@ -112,7 +112,7 @@ class QuestionController:
     """
     def __init__(self):
         self.model = QuestionModel() # φόρτωμα των ερωτήσεων.
-        self.delay = 3000
+        self.delay = 2500
         self.show_answers = False
         self.chosen = None
     
@@ -121,7 +121,7 @@ class QuestionController:
 
 
     def reset(self):
-        self.delay = 3000
+        self.delay = 2500
         self.show_answers = False
         self.chosen = None
         self.q_view.remove_messages()
@@ -162,7 +162,7 @@ class QuestionView:
 
     def __init__(self, q_controller):
         self.q_controller = q_controller # Ο αντίστοιχος controller, για να παίρνουμε τα στοιχεία και να του δώσουμε αναφορά στα buttons να ελέγχει. 
-        self.rect = pygame.Rect(240, 30, 800, 670)
+        # self.rect = pygame.Rect(240, 30, 800, 670)
         self.text_font = pygame.font.Font(None, 30)
         self.ans_group = pygame.sprite.Group()
         self.question_btn = QAButton([], self.q_controller.model.q_rect)

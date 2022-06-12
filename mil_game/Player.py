@@ -36,7 +36,12 @@ class Player:
         except ZeroDivisionError as Z:
             self.daep = 0.0
 
-    def update_stats(self):
+    def update_stats(self, time_elapsed):
+        if self.amount_pointer >= 0 and self.amount_pointer <= 14:
+            self.poso = self.possible_earnings[self.amount_pointer]
+        else:
+            self.poso = 0
+        self.total_time += time_elapsed
         self._calc_mo()
         self._calc_daep()
 
