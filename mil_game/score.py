@@ -70,18 +70,24 @@ class ScoreMode(BaseMode):
         """
         Μέθοδος update
         """
-        click = pygame.mouse.get_pressed()[0]
-        pos = pygame.mouse.get_pos()
+        # click = pygame.mouse.get_pressed()[0]
+        # pos = pygame.mouse.get_pos()
 
-        if(click and self.inputTick == 0):
-            self.inputTick = 250
-            if(self.menu_btn.rect.collidepoint(pos)):
-                self.game.changeMode(self.nextMode)
-        elif(self.inputTick > 0):
-            self.inputTick -= gameTime
+        # if(click and self.inputTick == 0):
+        #     self.inputTick = 250
+        #     if(self.menu_btn.rect.collidepoint(pos)):
+        #         self.game.changeMode(self.nextMode)
+        # elif(self.inputTick > 0):
+        #     self.inputTick -= gameTime
         
-        if(self.inputTick < 0):
-            self.inputTick = 0
+        # if(self.inputTick < 0):
+        #     self.inputTick = 0
+        pos = pygame.mouse.get_pos()
+        for event in event_list:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if self.menu_btn.rect.collidepoint(pos):
+                        self.game.changeMode(self.nextMode)
 
     def draw(self, surface):
         surface.blit(pygame.transform.scale(self.bgImage, (surface.get_rect().width, surface.get_rect().height)), (0,0))
