@@ -21,6 +21,7 @@ class ScoreMode(BaseMode):
         self.menu_btn.rect.bottom = self.game.mainscreen.get_rect().bottom - 20
         # self.buttons = [Button(700,50,pygame.Color(100,100,100), 'mil_game/images/btn_bg.png') for _ in range(10)]
         self.scorelines = []
+        self.textlines = []
         self.groupb = pygame.sprite.Group()
         self.inputTick = 0
         self.curr_player = None
@@ -47,15 +48,8 @@ class ScoreMode(BaseMode):
         
         self.players = self.players[:10]
 
-        # for btn, pl in zip(self.buttons, self.players):
-        #     print(pl)
-        #     btn.add_text(self.btn_font, str(pl), (255,60,30))
-        #     print("btn msg ", btn.msg)
-        #     btn.rect.x = 290
-        #     btn.rect.y = self.h
-        #     self.h += btn.rect.height + 15
-        #     btn.add(self.groupb)
-        
+        for i in range(10):
+            self.textlines.append(self.btn_font.render(str(self.players[i]), True,(255,60,30) ))
 
 
     def onExit(self):
@@ -83,8 +77,8 @@ class ScoreMode(BaseMode):
         # self.groupb.draw(surface)
         for i in range(10):
             surface.blit(self.scoreline_bg, self.scorelines[i])
-            text_line = self.btn_font.render(str(self.players[i]), True, (255,60,30))
-            surface.blit(text_line, text_line.get_rect(center = self.scorelines[i].center))
+            # text_line = self.btn_font.render(str(self.players[i]), True, (255,60,30))
+            surface.blit(self.textlines[i], self.textlines[i].get_rect(center = self.scorelines[i].center))
         surface.blit(self.menu_btn.image, self.menu_btn.rect)
 
 

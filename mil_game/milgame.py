@@ -9,7 +9,10 @@ from game_timer import *
 from helpers import *
 
 class RoundMsgMode(BaseMode):
-
+    """
+    Κλάση για την εμφάνιση μηνύματος στο τέλος κάθε γύρου
+    
+    """
 
     def __init__(self, game, next_mode, msg = "Επόμενη ερώτηση" ) -> None:
         super().__init__(game)

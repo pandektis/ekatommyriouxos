@@ -4,7 +4,10 @@ from math import pi
 
 
 class TimerModel:
-
+    """
+    Κλάση για τον μετρητή χρόνου
+    Κρατάει τα δεδομένα και την τρέχουσα κατάστασή του
+    """
 
     def __init__(self, seconds):
         self.time_allowed = seconds
@@ -41,14 +44,17 @@ class TimerController:
             
 
     def start(self):
+        # έναρξη χρονόμετρου
         pygame.time.set_timer(self.COUNTDOWN,1000)
         self.model.is_running = True
         
     def stop(self):
+        # σταμάτημα χρονόμετρου
         pygame.time.set_timer(self.COUNTDOWN, 0)
         self.is_running = False
 
     def reset(self):
+        # αρχικοποίηση χρονόμετρου
         self.model.counter = self.model.time_allowed
         self.model.is_over = False
         self.model.is_running = False

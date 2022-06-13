@@ -33,19 +33,29 @@ class InputMode(BaseMode):
 
 
     def update(self, gameTime, event_list):
+        """
+        Έλεγχος για είσοδο χρήστη και δημιουργία συμβολοσειράς ονόματος.
+
+        """
         for event in event_list:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
+                    # Αν πατηθεί BACKSPACE σβήνουμε από τη συμβολοσειρά το τελευταίο γράμμα
                     self.user_name = self.user_name[:-1]
                 elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                    # Αν πατηθεί ENTER ή RETURN περνάμε το όνομα στην επόμενη κατάσταση (GameMode) και αλλάζουμε κατάσταση
                     self.nextMode.set_name(self.user_name)
                     self.game.changeMode(self.nextMode)
                 else:
+                    # Αλλιώς προσθέτουμε στη γραμματοσειρά τον κωδικό unicode του πλήκτρου που πατήθηκε
                     self.user_name += event.unicode
                 
 
 
     def draw(self, surface):
+        """
+        Μέθοδος για την εμφάνιση του background, μηνύματος και πλαισίου εισάγωγής
+        """
         surface.blit(self.background_img, (0,0))
         surface.blit(self.overlay, (0,0))
         pygame.draw.rect(surface, (0,128,255), self.input_rect, 1)
@@ -59,6 +69,7 @@ class MenuMode(BaseMode):
     Κατάσταση παιχνιδιού Μενού.
     Το κυρίως μενού του παιχνιδιού
     """
+
     def __init__(self, game):
         super().__init__(game)
         self.menuButtons = pygame.sprite.Group()

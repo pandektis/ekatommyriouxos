@@ -178,8 +178,10 @@ class QuestionView:
         
     def add_messages(self):
         self.question_btn.add_text(pygame.font.Font(None, 40), self.q_controller.model.current_q.question,(60,128,156))
+        # Τυχαία σειρά εμφάνισης, για να μην είναι ίδια κάθε φορά.
+        answers = random.sample(self.q_controller.model.current_q.answers, 4)
         for i, btn in enumerate(self.ans_group.sprites()):
-            btn.add_text(pygame.font.Font(None, 30), self.q_controller.model.current_q.answers[i], (60, 28, 156))
+            btn.add_text(pygame.font.Font(None, 30), answers[i], (60, 28, 156))
     
     def remove_messages(self):
         self.question_btn.setup()

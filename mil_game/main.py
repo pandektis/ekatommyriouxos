@@ -12,7 +12,6 @@ from milgame import GameMode
 '''
 
 # Δείχνουμε τη splash, και μετά τη διώχνουμε
-players = [Player() for _ in range(10)] # Προς αφαίρεση, δοκιμαστικό
 splashscreen = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
 splashscreen.showSplash()
 splashscreen = None

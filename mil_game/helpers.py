@@ -4,14 +4,20 @@ from button import *
 
 
 class Helper:
-    
+    """
+    Κλάση βοήθειας. Έχει μόνο όνομα, θέση, και αν πατήθηκε ή όχι
+    """
     def __init__(self, rect, name) -> None:
         self.is_clicked = False
         self.rect = rect
         self.name = name
 
 class HelpersController:
-
+    """
+    Κλάση controller για βοήθειες
+    ελέγχει για το αν έγινε κλικ σε κάποια βοήθεια
+    διαχειρίζεται τις ενεργές βοήθειες
+    """
     def __init__(self):
         width = 95
         height = 50
@@ -41,7 +47,11 @@ class HelpersController:
                             self.done = True
 
 class HelpersView:
-
+    """
+    Κλάση View για βοήθειες
+    Φροντίζει για την εμφάνιση της ανενεργής βοήθειας
+    ζωγραφίζει μια κόκκινη γραμμή πάνω από το σύμβολο κάθε ανενεργής βοήθειας
+    """
     def __init__(self, helpers_ctrl) -> None:
         self.controller = helpers_ctrl
         self.image = pygame.Surface(self.controller.helpers[0].rect.size)
