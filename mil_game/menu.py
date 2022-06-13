@@ -1,5 +1,6 @@
 import pygame, os, sys
 from pygame.locals import *
+import time
 from game import *
 from milgame import *
 from button import Button
@@ -19,14 +20,16 @@ class InputMode(BaseMode):
         self.font_size = 28
         self.msg_font = pygame.font.Font(None, self.font_size)
         
-        self.user_prompt_surf = self.msg_font.render("Δώστε όνομα παίκτη (ENTER για default):", True, (255,128,0))
+        self.user_prompt_surf = self.msg_font.render("Δώστε όνομα παίκτη (ENTER για default):", True, (210,105,30))
         self.user_name = ""
-        # self.cursor = pygame.Rect
         
+        self.name_surf = self.msg_font.render(self.user_name, True, (210,105,30))
         self.msg_rect = pygame.Rect(0, 0, self.user_prompt_surf.get_rect().width + 4, self.font_size + 10)
         self.input_rect = pygame.Rect.copy(self.msg_rect)
         self.msg_rect.midbottom = width / 2, height / 2
         self.input_rect.midtop = width / 2, height / 2
+        self.cursor = pygame.Rect((self.input_rect.left + 4, self.input_rect.top + 10),(3, self.input_rect.height - 15))
+        self.name_rect = (self.input_rect.left + 4, self.input_rect.top + 10, 0, self.input_rect.height - 10)
         self.overlay = pygame.Surface((width, height))
         self.overlay.set_alpha(150)
         self.overlay.fill((0,0,0))
@@ -49,8 +52,11 @@ class InputMode(BaseMode):
                 else:
                     # Αλλιώς προσθέτουμε στη γραμματοσειρά τον κωδικό unicode του πλήκτρου που πατήθηκε
                     self.user_name += event.unicode
-                
-
+        self.name_surf = self.msg_font.render(self.user_name, True, (210,105,30))
+        self.name_rect = self.name_surf.get_rect()
+        self.name_rect.topleft = (self.input_rect.left +4, self.input_rect.top +10)    
+        self.cursor.topleft = self.name_rect.topright
+        
 
     def draw(self, surface):
         """
@@ -60,8 +66,10 @@ class InputMode(BaseMode):
         surface.blit(self.overlay, (0,0))
         pygame.draw.rect(surface, (0,128,255), self.input_rect, 1)
         surface.blit(self.user_prompt_surf, (self.msg_rect.x + 2, self.msg_rect.y ))
-        input_surf = self.msg_font.render(self.user_name, True, (128, 255, 0))
-        surface.blit(input_surf, (self.input_rect.left +4, self.input_rect.top +5))
+        
+        surface.blit(self.name_surf, self.name_rect)
+        if time.time() % 1 > 0.5:
+            pygame.draw.rect(surface, (210,105,30), self.cursor)
 
 
 class MenuMode(BaseMode):

@@ -82,10 +82,16 @@ class PlayerView:
         
         
     def update_name(self):
+        """
+        Μέθοδος για ενημέρωση του ονόματος του παίκτη
+        """
         self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (0,0,0))
         self.name_surf.set_colorkey((0,0,0,))
     
     def draw(self, surface):
+        """
+        Μέθοδος εμφάνισης των στοιχείων του παίκτη κατά τη διάρκεια του παιχνιδιού.
+        """
         x , z = self.a_left, self.a_right
         a, b = self.a_hor_offset, self.a_vert_offset
         surface.blit(self.name_surf, (150,250))
