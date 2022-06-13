@@ -11,7 +11,8 @@ from helpers import *
 class RoundMsgMode(BaseMode):
     """
     Κλάση για την εμφάνιση μηνύματος στο τέλος κάθε γύρου
-    
+    Μεταβαίνουμε σ' αυτή μετά από κάθε γύρο, και επιστρέφουμε στο παιχνίδι (GameMode) μετά
+    Εκτός από το τέλος του παιχνιδιού, όπου μετά μεταφερόμαστε στα high scores
     """
 
     def __init__(self, game, next_mode, msg = "Επόμενη ερώτηση" ) -> None:
@@ -66,6 +67,10 @@ class GameMode(BaseMode):
     από τα περιεχόμενα αντικείμενα.    
     """
     def __init__(self, game, gameOverMode):
+        """
+        Αρχικοποίηση μεταβλητών που χρειάζεται η κλάση καθώς και δημιουργία αντικειμένων
+        (player, timer, question, κτλ ) που χρειάζεται το παιχνίδι.
+        """
         super().__init__(game)
         self.gameOverMode = gameOverMode
         self.time_allowed = 60
@@ -90,15 +95,29 @@ class GameMode(BaseMode):
         self.views = [self.player_view, self.question_view, timer_view, helpers_view]
 
     def set_name(self, name):
+        """
+        Μέθοδος για να ορίσουμε το όνομα του παίκτη
+        καλείται από την κατάσταση InputMode
+        """
         if name:
             self.player_controller.model.name = name
             self.player_view.update_name()
 
     def reset_all(self):
+        """
+        Μέθοδος για επαναφορά δεδομένων ερώτησης και βοήθειας
+        """
         self.question_controller.reset()
         self.helper_controller.done = False
 
     def onEnter(self, oldMode):
+        """
+        Μέθοδος που εκτελείται κατά την είσοδο στην κατάσταση
+        Κατεβάζουμε τη σημαία για το τέλος του γύρου
+        ελέγχουμε/θέτουμε το επίπεδο ερώτησης
+        παίρνουμε νέα ερώτηση
+        και επαναφέρουμε το χρονόμετρο
+        """
         self.endRound = False
         if self.player_controller.model.amount_pointer == 4:
             self.question_controller.model.curent_level = "B"
@@ -112,6 +131,10 @@ class GameMode(BaseMode):
         self.time_counter.reset()
 
     def onExit(self):
+        """
+        Μέθοδος που εκτελείται κατά την έξοδο από την κατάσταση
+        επαναφέρουμε την ερώτηση (σβήνουμε δλδ αυτήν που μόλις έπαιξε)
+        """
         self.question_controller.reset()
         
 
@@ -120,20 +143,25 @@ class GameMode(BaseMode):
         """ Γενική συνάρτηση για ενημέρωση όλων των αντικειμένων που αποτελούν το παιχνίδι
         Καλεί τις ξεχωριστές update κάθε αντικειμένου ώστε να ενημερωθεί το καθένα μόνο του
         Ελέγχει αν έχει γίνει κάποια αλλαγή.
-        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. """
-        # Ζητάμε από κάθε αντικείμενο που αποτελεί το παρόν mode παιχνιδιού να κάνει τους ελέγχους και τις ενημερώσεις.
+        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου, μέσα στη run() της 'μηχανής' δηλαδή, 30 φορές το δευτερόλεπτο """
+
+        # Ελέγχουμε αν έχει τεθεί η σημαία για το τέλος του γύρου, και πράττουμε ανάλογα.
         if self.endRound:
             self.game.changeMode(self.endRoundMode)
             self.endRound = False
             # self.question_controller.reset()
             self.reset_all()
             return
-        
+
+        # Ζητάμε από κάθε αντικείμενο που αποτελεί το παρόν mode παιχνιδιού να κάνει τους ελέγχους και τις ενημερώσεις.
+        # Καλούμε την update() κάθε αντικειμένου controller (playerController, questionController, κτλ)
+        # Κάθε αντικείμενο με τη σειρά του κάνει τους ελέγχους/ενέργειες που χρειάζεται και μεταβάλλει την κατάστασή του
+        # (θέτει μεταβλητές, ενημερώνει στοιχεία, κτλ).
         for manager in self.controllers:
             manager.update(gameTime, event_list)
         
         # Μετά το update ρωτάμε τα αντικείμενα για τις συνθήκες που θέλουμε
-        # Παράδειγμα ακολουθεί. Αυτές τις συνθήκες /ελέγχους βέβαια μπορούμε να τις μοιράσουμε 
+        # Αυτές τις συνθήκες /ελέγχους βέβαια μπορούμε να τις μοιράσουμε 
         # στα αντικείμενά που θέλουμε να ελέγξουμε
         #
       
@@ -189,15 +217,18 @@ class GameMode(BaseMode):
         # Συνολική συνθήκη για τέλος παιχνιδιού.
         if self.player_controller.model.lives == 0 or self.player_controller.model.amount_pointer == 14:
             if self.player_controller.model.lives == 0:
+                # έλεγχος για τα 'μαξιλαράκια'
                 if self.player_controller.model.amount_pointer >= 9:
                     self.player_controller.model.amount_pointer = 9
                 elif self.player_controller.model.amount_pointer >= 4:
                     self.player_controller.model.amount_pointer = 4
                 else:
                     self.player_controller.model.amount_pointer = 0
-
+            # ενημέρωση στατιστικών του παίκτη
             self.player_controller.model.update_stats(0)
+            # gameOverMode είναι τα high scores, περνάμε τον τρέχων παίκτη 
             self.gameOverMode.curr_player = self.player_controller.model
+            # Δημιουργούμε αντικείμενο για το τέλος του γύρου, με μετάβαση στο gameOverMode
             self.endRoundMode = RoundMsgMode(self.game,self.gameOverMode, "€"+str(self.player_controller.model.poso))
 
 
@@ -207,11 +238,12 @@ class GameMode(BaseMode):
         Εμφανίζουμε το background και ότι άλλο σταθερό ανήκει στο παιχνίδι
         και μετά καλούμε την draw κάθε υπεύθυνου αντικειμένου για να εμφανίσει κι αυτό τα δικά του και 
         να ολοκληρωθεί η εικόνα (frame)
-        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου. 
+        Τρέχει σε κάθε επανάληψη του κυρίως βρόχου, μέσα στη run() της 'μηχανής' δηλαδή, 30 φορές το δευτερόλεπτο 
         """
         ### Κώδικας για background και ό,τι άλλο δεν ανήκει σε κάποιο άλλο αντικείμενο
         surface.blit(self.background_img, (0,0))
-        # Ζητάμε από κάθε View να εμφανίσει αυτά που έχει στην οθόνη
+
+        # Ζητάμε από κάθε αντικείμενο View (playerView, questionView, κτλ) να εμφανίσει αυτά που έχει στην οθόνη
         for painter in self.views:
             painter.draw(surface)
         
