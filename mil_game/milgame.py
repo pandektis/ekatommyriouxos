@@ -163,8 +163,7 @@ class GameMode(BaseMode):
         # Μετά το update ρωτάμε τα αντικείμενα για τις συνθήκες που θέλουμε
         # Αυτές τις συνθήκες /ελέγχους βέβαια μπορούμε να τις μοιράσουμε 
         # στα αντικείμενά που θέλουμε να ελέγξουμε
-        #
-      
+            
 
         #### ρωτάμε τα αντικείμενα αν έγινε κάτι, και πράττουμε ανάλογα
 
@@ -211,8 +210,11 @@ class GameMode(BaseMode):
         
         # Συνθήκη για επιλογή βοήθειας
         elif self.helper_controller.done and self.helper_controller.current_helper != None:
-            self.question_controller.take_help_action(self.helper_controller.current_helper.name)
-            self.helper_controller.current_helper = None
+            if self.helper_controller.current_helper.name == "other":
+                self.endRound = True
+            else:
+                self.question_controller.take_help_action(self.helper_controller.current_helper.name)
+                self.helper_controller.current_helper = None
         
         # Συνολική συνθήκη για τέλος παιχνιδιού.
         if self.player_controller.model.lives == 0 or self.player_controller.model.amount_pointer == 14:
