@@ -74,7 +74,7 @@ class QuestionModel:
             for i in range(len(lines)):
                 #γραμμή γραμμή
                 line = lines[i]
-                #Όλες οι ερωτήσεις τελειώνουν με ; οπότε με τη line.rstrip().endswith(";")  ξέρουμε οτι ξεκινάει μια ερώτηση και οι απαντήσεις της.
+                #Όλες οι ερωτήσεις τελειώνουν με ; οπότε με τη line.rstrip().endswith(";")  ξέρουμε οτι ξεκινάει μια ερώτηση και οι απαντήσεις της
                 if line.rstrip().endswith(";"):
                 #Αν η συνθήκη ειναι true τότε στέλνουμε ως ορίσματα στην κλάση question τις ερωτήσεις και τις αντίστοιχες απαντήσεις
                     question = Question(line, [lines[j].rstrip() for j in range(i + 1, i + 5)] )
@@ -126,6 +126,8 @@ class QuestionController:
         self.chosen = None
         self.q_view.remove_messages()
         self.q_view.question_btn.setup()
+        if self.q_view.hidden_group.sprites():
+            self.q_view.ans_group.add(*self.q_view.hidden_group.sprites())
         for a in self.q_view.ans_group.sprites():
             a.setup()
             a.clicked = False
@@ -137,30 +139,29 @@ class QuestionController:
         if name == 'fifty':
             # λιστα με τα νούμερα των πιθανών απαντήσεων
             ans_list = [ans for ans in self.q_view.ans_group.sprites() if
-                        ans != self.model.current_q.answers[self.model.current_q.correct_answer]]
+                        ans.msg != self.model.current_q.answers[self.model.current_q.correct_answer]]
 
             # ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
 
             ans_list.remove(random.choice(ans_list))
-            ans_list.remove(random.choice(ans_list))
+
             for a in ans_list:
                 a.remove(self.q_view.ans_group)
+                a.add(self.q_view.hidden_group)
 
             # Εδώ ελέγχεις τι θες να κάνεις με αυτες που έμειναν
             # η της κάνεις κοκκίνες η .remove
 
             print("the name is", name)
-
         elif name == 'computer':
-            ans = [0, 1, 2, 3]
+            for ans in self.q_view.ans_group.sprites()[:]:
+                if ans.msg == self.model.current_q.answers[self.model.current_q.correct_answer]:
+                    ans.clicked = True
+                else:
+                    ans.clicked = False
+                # η της κάνεις κοκκίνες η .remove
 
-            #ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
-
-            for i in ans:
-            # η της κάνεις κοκκίνες η .remove
-
-            
-                print("the name is", name)
+            print("the name is", name)
         elif name == 'other':
 
             #απλα ξανακαλεις μια ερώτηση απο όπου την καλείς?
@@ -168,7 +169,6 @@ class QuestionController:
 
 
             print("the name is", name)
-
 
     def update(self, gameTime, event_list):
         if self.delay > 0:
@@ -194,6 +194,7 @@ class QuestionView:
         # self.rect = pygame.Rect(240, 30, 800, 670)
         self.text_font = pygame.font.Font(None, 30)
         self.ans_group = pygame.sprite.Group()
+        self.hidden_group = pygame.sprite.Group()
         self.question_btn = QAButton([], self.q_controller.model.q_rect)
         self.ansA_btn = QAButton(self.ans_group, self.q_controller.model.ansA_rect)
         self.ansB_btn = QAButton(self.ans_group, self.q_controller.model.ansB_rect)
