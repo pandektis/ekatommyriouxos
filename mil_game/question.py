@@ -135,11 +135,37 @@ class QuestionController:
 
     def take_help_action(self, name):
         if name == 'fifty':
-            print("the name is", name)
+            # λιστα με τα νούμερα των πιθανών απαντήσεων
+            ans = [0, 1, 2, 3]
+
+            #ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
+
+            ans.remove(random.choice(ans))
+
+            for i in ans:
+            # Εδώ ελέγχεις τι θες να κάνεις με αυτες που έμειναν
+            # η της κάνεις κοκκίνες η .remove
+
+            
+                print("the name is", name)
         elif name == 'computer':
-            print("the name is", name)
+            ans = [0, 1, 2, 3]
+
+            #ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
+
+            for i in ans:
+            # η της κάνεις κοκκίνες η .remove
+
+            
+                print("the name is", name)
         elif name == 'other':
+
+            #απλα ξανακαλεις μια ερώτηση απο όπου την καλείς?
+            #και την αφαιρείς απο όπου τις κρατάς να μην επιρεαστεί η κλιμακωτή δυσκολία?
+
+
             print("the name is", name)
+
 
     def update(self, gameTime, event_list):
         if self.delay > 0:
