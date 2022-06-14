@@ -136,18 +136,21 @@ class QuestionController:
     def take_help_action(self, name):
         if name == 'fifty':
             # λιστα με τα νούμερα των πιθανών απαντήσεων
-            ans = [0, 1, 2, 3]
+            ans_list = [ans for ans in self.q_view.ans_group.sprites() if
+                        ans != self.model.current_q.answers[self.model.current_q.correct_answer]]
 
-            #ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
+            # ans.remove(εδώ θα μπει το νουμερο της σωστης απάντησης αφου εμφανιστει στο πρόγραμμα)
 
-            ans.remove(random.choice(ans))
+            ans_list.remove(random.choice(ans_list))
+            ans_list.remove(random.choice(ans_list))
+            for a in ans_list:
+                a.remove(self.q_view.ans_group)
 
-            for i in ans:
             # Εδώ ελέγχεις τι θες να κάνεις με αυτες που έμειναν
             # η της κάνεις κοκκίνες η .remove
 
-            
-                print("the name is", name)
+            print("the name is", name)
+
         elif name == 'computer':
             ans = [0, 1, 2, 3]
 
