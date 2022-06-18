@@ -74,7 +74,9 @@ class PlayerView:
     def __init__(self, player_ctrl):
         self.player = player_ctrl
         self.view_font = pygame.font.Font(None, 36)
-        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (255,0,0))
+        self.name_surf = self.view_font.render(self.player.model.name, True, (107,142,35), (0,0,0))
+        self.life_surf = pygame.transform.scale(pygame.image.load('images/smiley.jpg').convert(), (50,50))
+        
         self.a_left = 1100
         self.a_right = 1245
         self.a_y = 560
@@ -88,7 +90,7 @@ class PlayerView:
         """
         Μέθοδος για ενημέρωση του ονόματος του παίκτη
         """
-        self.name_surf = self.view_font.render(self.player.model.name, True, (0,255,0), (0,0,0))
+        self.name_surf = self.view_font.render(self.player.model.name, True, (107,142,35), (0,0,0))
         self.name_surf.set_colorkey((0,0,0,))
     
     def draw(self, surface):
@@ -98,6 +100,8 @@ class PlayerView:
         x , z = self.a_left, self.a_right
         a, b = self.a_hor_offset, self.a_vert_offset
         surface.blit(self.name_surf, (150,250))
+        for k in range(self.player.model.lives):
+            surface.blit(self.life_surf, (150 + k * 55, 300) )
         for i in range(len(self.player.model.possible_earnings)):
             if i <= self.player.model.amount_pointer:
                 y = self.a_y - (2*b + 2) * i

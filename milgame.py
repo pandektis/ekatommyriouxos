@@ -18,31 +18,44 @@ class RoundMsgMode(BaseMode):
     def __init__(self, game, next_mode, msg = "Επόμενη ερώτηση" ) -> None:
         super().__init__(game)
         self.next_mode = next_mode
-        self.delay = 3000
+        self.delay = 5000
         self.msg = msg
         self.base_rect = pygame.Rect(130,35,840,130)
         self.base_surf = pygame.Surface(self.base_rect.size)
         self.base_surf.fill(0)
-        self.overlay = pygame.Surface(self.game.mainscreen.get_size())
-        self.overlay.set_alpha(150)
-        self.overlay.fill((0,0,0))
-        msg_font = pygame.font.Font(None, 60)
-        self.msg_surf = pygame.font.Font.render(msg_font,msg,True, (255,0,0), (0,0,0))
+        self.msg_font = pygame.font.Font(None, 60)
+        self.msg_surf = pygame.font.Font.render(self.msg_font,msg,True, (255,215,0), (0,0,0))
         self.msg_surf.set_colorkey((0,0,0))
         self.msg_rect = self.msg_surf.get_rect()
         self.msg_rect.midbottom = self.base_rect.midbottom
+        self.correct_sound = pygame.mixer.Sound("snd/correct_answer.mp3")
+        self.correct_sound.set_volume(0.2)
+        self.wrong_sound = pygame.mixer.Sound("snd/wrong_answer.mp3")
+        self.wrong_sound.set_volume(0.2)
+
+
 
     def set_msg(self, msg):
-        self.msg_surf = pygame.font.Font.render(None,msg,True, (255,0,0), (0,0,0))
+        self.msg = msg
+        self.msg_surf = self.msg_font.render(msg,True, (255,215,0), (0,0,0))
+        self.msg_rect = self.msg_surf.get_rect()
+        self.msg_rect.midbottom = self.base_rect.midbottom
         self.msg_surf.set_colorkey((0,0,0))
         
 
     def update(self, gameTime, event_list):
+        if(self.msg == "Επόμενη ερώτηση"):
+            self.wrong_sound.play()
+        else:
+            self.correct_sound.play()
         if self.delay <= 0:
+            pygame.mixer.stop()
             self.game.changeMode(self.next_mode)
-            self.delay = 3000
+            self.delay = 5000
         self.delay -= gameTime
-        self.msg_rect.bottom -= 1
+        if self.msg_rect.bottom > 70:
+            self.msg_rect.bottom -= 1
+        print(self.msg_rect.bottom)
 
     def onExit(self):
         self.msg_rect.midbottom = self.base_rect.midbottom
@@ -178,9 +191,13 @@ class GameMode(BaseMode):
             if self.question_controller.check_answer():
                 # Αν είναι σωστή, αυξάνουμε το δείκτη του ποσού
                 self.player_controller.model.amount_pointer += 1
+                print(self.player_controller.model.amount_pointer)
+                print(self.player_controller.model.possible_earnings[self.player_controller.model.amount_pointer])
+                self.endRoundMode.set_msg("€"+str(self.player_controller.model.possible_earnings[self.player_controller.model.amount_pointer]))
             else:
                 # Αλλιώς μειώνουμε τις 'ζωές'
                 self.player_controller.model.lives -= 1
+                self.endRoundMode.set_msg("Επόμενη ερώτηση")
             # Είτε σωστή είτε όχι, αυξάνουμε τον αριθμό των ερωτήσεων, ενημερώνουμε σημαία για τέλος γύρου
             # και ανανεώνουμε στατιστικά και ερωτήσεις
             self.player_controller.model.num_questions += 1
@@ -210,8 +227,10 @@ class GameMode(BaseMode):
         
         # Συνθήκη για επιλογή βοήθειας
         elif self.helper_controller.done and self.helper_controller.current_helper != None:
+            # Αν η βοήθεια είναι "other" τότε τελειώνουμε απλώς τον γύρο, χωρίς να αλλάξουμε κάτι
             if self.helper_controller.current_helper.name == "other":
                 self.endRound = True
+            # Αλλιώς καλούμε τη μέθοδο take_help_action που αποφασίζει ανάλογα με το όνομα της βοήθειας
             else:
                 self.question_controller.take_help_action(self.helper_controller.current_helper.name)
                 self.helper_controller.current_helper = None
@@ -225,7 +244,7 @@ class GameMode(BaseMode):
                 elif self.player_controller.model.amount_pointer >= 4:
                     self.player_controller.model.amount_pointer = 4
                 else:
-                    self.player_controller.model.amount_pointer = 0
+                    self.player_controller.model.amount_pointer = -1
             # ενημέρωση στατιστικών του παίκτη
             self.player_controller.model.update_stats(0)
             # gameOverMode είναι τα high scores, περνάμε τον τρέχων παίκτη 
