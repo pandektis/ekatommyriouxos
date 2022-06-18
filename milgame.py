@@ -55,7 +55,7 @@ class RoundMsgMode(BaseMode):
         self.delay -= gameTime
         if self.msg_rect.bottom > 70:
             self.msg_rect.bottom -= 1
-        print(self.msg_rect.bottom)
+        
 
     def onExit(self):
         self.msg_rect.midbottom = self.base_rect.midbottom
