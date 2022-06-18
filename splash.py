@@ -53,7 +53,7 @@ class SplashMode(object):
 
 if __name__ == "__main__":
 
-    splash = SplashMode(600, 600, "mil_game\images\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
+    splash = SplashMode(600, 600, "images\ek_logo.png", "snd/millionaire_intro.mp3", "LOADING...")
     splash.showSplash()
     
             

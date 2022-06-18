@@ -75,7 +75,7 @@ class GameMode(BaseMode):
         self.gameOverMode = gameOverMode
         self.time_allowed = 60
         self.endRound = False
-        self.background_img = pygame.image.load("mil_game/images/game_bg.png")
+        self.background_img = pygame.image.load("images/game_bg.png")
         # self.background_img = pygame.transform.scale(self.background_img, self.game.mainscreen.get_size())
         self.player_controller = PlayerController("Player")
         self.player_view = PlayerView(self.player_controller)

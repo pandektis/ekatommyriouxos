@@ -15,7 +15,7 @@ class InputMode(BaseMode):
         super().__init__(game)
         self.nextMode = nextMode
         width, height = pygame.display.get_window_size()
-        self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg')
+        self.background_img = pygame.image.load('images/ek_menu.jpg')
         self.background_img = pygame.transform.scale(self.background_img, (width, height))
         self.font_size = 28
         self.msg_font = pygame.font.Font(None, self.font_size)
@@ -81,12 +81,12 @@ class MenuMode(BaseMode):
     def __init__(self, game):
         super().__init__(game)
         self.menuButtons = pygame.sprite.Group()
-        self.background_img = pygame.image.load('mil_game/images/ek_menu.jpg').convert()
+        self.background_img = pygame.image.load('images/ek_menu.jpg').convert()
         self.menuItems = ['Νέο παιχνίδι', 'Αποτελέσματα', 'Έξοδος']
         font_size = 25
         btn_font = pygame.font.SysFont(None, font_size)
         for item in self.menuItems:
-            btn = Button(200,font_size *2, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', clickable = True)
+            btn = Button(200,font_size *2, pygame.Color(100,100,100),'images/btn_bg.png', clickable = True)
             btn.add_text(btn_font, item, (255,128,0))
             btn.add(self.menuButtons)
 

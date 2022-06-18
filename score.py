@@ -12,14 +12,14 @@ class ScoreMode(BaseMode):
         super().__init__(game)
         self.players = []
         self.nextMode = nextMode
-        self.bgImage = pygame.image.load('mil_game/images/ek_set.jpg').convert()
-        self.scoreline_bg = pygame.transform.scale(pygame.image.load('mil_game/images/btn_bg.png').convert_alpha(), (700,50))
+        self.bgImage = pygame.image.load('images/ek_set.jpg').convert()
+        self.scoreline_bg = pygame.transform.scale(pygame.image.load('images/btn_bg.png').convert_alpha(), (700,50))
         # self.scoreline_bg.set_colorkey(0,0,0)
         self.btn_font = pygame.font.SysFont(None, 25)
-        self.menu_btn =Button(200,50, pygame.Color(100,100,100),'mil_game/images/btn_bg.png', True)
+        self.menu_btn =Button(200,50, pygame.Color(100,100,100),'images/btn_bg.png', True)
         self.menu_btn.add_text(self.btn_font, "Μενού Επιλογών", (255,128,0))
         self.menu_btn.rect.bottom = self.game.mainscreen.get_rect().bottom - 20
-        # self.buttons = [Button(700,50,pygame.Color(100,100,100), 'mil_game/images/btn_bg.png') for _ in range(10)]
+        # self.buttons = [Button(700,50,pygame.Color(100,100,100), 'images/btn_bg.png') for _ in range(10)]
         self.scorelines = []
         self.textlines = []
         self.groupb = pygame.sprite.Group()
